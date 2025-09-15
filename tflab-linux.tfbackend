@@ -1,0 +1,3 @@
+storage_account_name = "tfstate18373"
+container_name = "tfstate"
+key="HillestadTech/tflab-linux/terraform.tfstate"
