@@ -4,6 +4,8 @@
 # .tfstate files
 *.tfstate
 *.tfstate.*
+**.tfstate
+**.tfstate.*
 
 # Crash log files
 crash.log
@@ -15,6 +17,8 @@ crash.*.log
 # to change depending on the environment.
 *.tfvars
 *.tfvars.json
+**.tfvars
+**.tfvars.json
 
 # Ignore override files as they are usually used to override resources locally and so
 # are not checked in
