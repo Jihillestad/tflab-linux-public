@@ -1,8 +1,18 @@
+# Description: This Terraform configuration creates an Azure Virtual Network
+# with subnets and a Network Security Group (NSG) with a rule to allow SSH
+# access.
+
+
+# Random string for unique naming
+
 resource "random_string" "main" {
   length  = 4
   upper   = false
   special = false
 }
+
+
+#Build the NSG with a rule to allow SSH
 
 resource "azurerm_network_security_group" "nsg1" {
   name                = "${var.prefix}-${var.project_name}-nsg-${var.environment}"
@@ -30,6 +40,9 @@ resource "azurerm_network_security_group" "nsg1" {
     }
   ]
 }
+
+
+#Build the VNet and subnets
 
 resource "azurerm_virtual_network" "vnet1" {
   name                = "${var.prefix}-${var.project_name}-vnet-${var.environment}"

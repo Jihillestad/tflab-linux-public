@@ -1,3 +1,5 @@
+# Create an Azure Key Vault and store SSH keys as secrets
+
 module "kv" {
   source              = "./modules/kv/"
   resource_group_name = azurerm_resource_group.tflab_linux.name

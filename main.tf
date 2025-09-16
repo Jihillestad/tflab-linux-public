@@ -1,4 +1,9 @@
+# Terraform configuration file for deploying a Linux VM in Azure with networking, key vault and monitoring
+
+# Local variables
 locals {
+
+  #Reusable tags for all resources
   common_tags = {
     Project     = var.project_name
     Environment = var.environment
@@ -6,6 +11,7 @@ locals {
   }
 }
 
+# Create a single Azure resource group for simplicity
 resource "azurerm_resource_group" "tflab_linux" {
   name     = "${var.prefix}-${var.project_name}-rg-${var.environment}"
   location = var.location
@@ -13,6 +19,7 @@ resource "azurerm_resource_group" "tflab_linux" {
   tags = local.common_tags
 }
 
+# Building the network
 module "network" {
   source              = "./modules/net/"
   resource_group_name = azurerm_resource_group.tflab_linux.name
@@ -28,6 +35,9 @@ module "network" {
   tags = local.common_tags
 }
 
+# Create a network interface for the Linux VM. In future version tags, I'll
+# automate the creation of Compute resurces
+
 module "nic_linux" {
   source              = "./modules/compute/"
   resource_group_name = azurerm_resource_group.tflab_linux.name
@@ -40,6 +50,7 @@ module "nic_linux" {
   tags = local.common_tags
 }
 
+# Create a Log Analytics Workspace for monitoring
 resource "azurerm_log_analytics_workspace" "law" {
   name                = "${var.prefix}-${var.project_name}-law-${var.environment}"
   location            = azurerm_resource_group.tflab_linux.location
