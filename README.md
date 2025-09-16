@@ -6,7 +6,7 @@ This repository contains a simplified single Resouce Group Azure Landing Zone (L
 
 ### Networking
 
-#### Version 0.1.1
+#### Version 0.1.1-2
 
 - Vnet with subnets:
   - Default subnet
@@ -17,7 +17,7 @@ This repository contains a simplified single Resouce Group Azure Landing Zone (L
 
 ### Monitoring
 
-#### Version 0.1.1
+#### Version 0.1.1-2
 
 - Log Analytics Workspace
 - Network Watcher
@@ -26,7 +26,7 @@ This repository contains a simplified single Resouce Group Azure Landing Zone (L
 
 ### Compute
 
-#### Version 0.1.1
+#### Version 0.1.1-2
 
 This release is for showing how to set up a basic Linux VM in Azure. The
 Terraform code creates the necessary Azure boilerplate needed for a VM, and
@@ -43,7 +43,7 @@ The functionality will depend on what I am currently learning and sharing
 
 ### IAM
 
-#### Version 0.1.1
+#### Version 0.1.1-2
 
 - Azure Key Vault
 - SSH keys:
@@ -102,4 +102,3 @@ key="tflab-linux/terraform.tfstate"
 This code is provided "as is" and is intended for lab and educational purposes
 only. It may not follow best practices for production environments. Use at your
 own risk.
-
