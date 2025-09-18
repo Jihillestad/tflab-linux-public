@@ -2,7 +2,13 @@
 
 This repository contains a simplified single Resouce Group Azure Landing Zone (LZ) setup intented for learning and experimentation purposes. It is not designed for production use.
 
-## Features
+## Prerequisites
+
+- Azure CLI installed and authenticated (`az login`)
+- Terraform >= 1.5 installed
+- Storage Account for Terraform backend (optional, but recommended)
+
+## Resource Details
 
 ### Networking
 
@@ -16,8 +22,6 @@ This repository contains a simplified single Resouce Group Azure Landing Zone (L
   - Allow SSH (port 22) inbound (Keeping it simple for lab usage)
 
 ### Monitoring
-
-#### Version 0.1.1-2
 
 - Log Analytics Workspace
 - Network Watcher
@@ -43,12 +47,21 @@ The functionality will depend on what I am currently learning and sharing
 
 ### IAM
 
-#### Version 0.1.1-2
-
 - Azure Key Vault
 - SSH keys:
   - Private key
   - Public Key
+
+## Variable Example (.tfvars)
+
+Using some CFA'ish naming convention and SemVer for environment versioning:
+
+```hcl
+prefix       = "myorg"
+project_name = "linuxlab"
+environment  = "core"
+env_version  = "0.0.1"
+```
 
 ## How to use
 

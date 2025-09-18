@@ -19,6 +19,7 @@ resource "azurerm_network_security_group" "nsg1" {
   resource_group_name = var.resource_group_name
   location            = var.location
 
+  # Allow SSH from Bastion subnet
   security_rule = [
     {
       name                                       = "SSH"
@@ -28,13 +29,13 @@ resource "azurerm_network_security_group" "nsg1" {
       protocol                                   = "Tcp"
       source_port_range                          = "*"
       destination_port_range                     = "22"
-      source_address_prefix                      = "*"
+      source_address_prefix                      = ""
       destination_address_prefix                 = "*"
       description                                = ""
       destination_address_prefixes               = []
       destination_application_security_group_ids = []
       destination_port_ranges                    = []
-      source_address_prefixes                    = []
+      source_address_prefixes                    = azurerm_subnet.bastion_subnet.address_prefixes
       source_application_security_group_ids      = []
       source_port_ranges                         = []
     }
@@ -57,14 +58,14 @@ resource "azurerm_subnet" "default" {
   name                 = "${var.prefix}-${var.project_name}-subnet-default-${var.environment}"
   resource_group_name  = var.resource_group_name
   virtual_network_name = azurerm_virtual_network.vnet1.name
-  address_prefixes     = [cidrsubnet(tolist(azurerm_virtual_network.vnet1.address_space)[0], 8, 1)]
+  address_prefixes     = [cidrsubnet(tolist(azurerm_virtual_network.vnet1.address_space)[0], 8, 1)] # Dynamic /24 subnet from /16 VNet
 }
 
 resource "azurerm_subnet" "bastion_subnet" {
   name                 = "AzureBastionSubnet"
   resource_group_name  = var.resource_group_name
   virtual_network_name = azurerm_virtual_network.vnet1.name
-  address_prefixes     = [cidrsubnet(tolist(azurerm_virtual_network.vnet1.address_space)[0], 10, 8)]
+  address_prefixes     = [cidrsubnet(tolist(azurerm_virtual_network.vnet1.address_space)[0], 10, 8)] # Dynamic /26 subnet to meet Bastion requirements
 }
 
 resource "azurerm_subnet_network_security_group_association" "default_rule1" {
