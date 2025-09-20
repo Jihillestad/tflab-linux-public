@@ -19,9 +19,9 @@ resource "azurerm_storage_account" "boot_diagnostics_sa" {
   resource_group_name = var.resource_group_name
   location            = var.location
 
-  account_tier               = "Standard"
-  account_kind               = "StorageV2"
-  account_replication_type   = "LRS"
+  account_tier               = var.sa_account_tier
+  account_kind               = var.sa_account_kind
+  account_replication_type   = var.sa_account_replication_type
   https_traffic_only_enabled = true
 }
 

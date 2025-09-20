@@ -11,9 +11,9 @@ resource "azurerm_storage_account" "nw_sa" {
   resource_group_name = var.resource_group_name
   location            = var.location
 
-  account_tier               = "Standard"
-  account_kind               = "StorageV2"
-  account_replication_type   = "LRS"
+  account_tier               = var.sa_account_tier
+  account_kind               = var.sa_account_kind
+  account_replication_type   = var.sa_account_replication_type
   https_traffic_only_enabled = true
 }
 
@@ -27,7 +27,7 @@ resource "azurerm_network_watcher_flow_log" "main" {
   storage_account_id = azurerm_storage_account.nw_sa.id
   enabled            = true
   retention_policy {
-    days    = 7
+    days    = var.vnet_flow_log_retention_days
     enabled = true
   }
 

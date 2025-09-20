@@ -5,13 +5,19 @@ variable "prefix" {
 }
 
 variable "location" {
-  type    = string
-  default = "norwayeast"
+  description = "The Azure region where resources will be deployed"
+  type        = string
+  default     = "norwayeast"
+  validation {
+    condition     = contains(["norwayeast", "norwaywest", "westeurope", "northeurope"], var.location)
+    error_message = "The location must be one of: norwayeast, norwaywest, westeurope, northeurope."
+  }
 }
 
 variable "username" {
-  type    = string
-  default = "adminuser"
+  description = "The admin username for the VM"
+  type        = string
+  default     = "adminuser"
 }
 
 variable "size" {
@@ -29,5 +35,10 @@ variable "environment" {
 }
 
 variable "env_version" {
-  type = string
+  description = "The version of the environment following semantic versioning (e.g., v1.0.0)"
+  type        = string
+  validation {
+    condition     = can(regex("^v[0-9]+\\.[0-9]+\\.[0-9]+$", var.env_version))
+    error_message = "The environment version must follow semantic versioning (e.g., v1.0.0)."
+  }
 }
