@@ -12,8 +12,6 @@ This repository contains a simplified single Resouce Group Azure Landing Zone (L
 
 ### Networking
 
-#### Version 0.1.1-3
-
 - Vnet with subnets:
   - Default subnet
   - Bastion subnet
@@ -30,18 +28,14 @@ This repository contains a simplified single Resouce Group Azure Landing Zone (L
 
 ### Compute
 
-#### Version 0.1.1-3
-
-This release is for showing how to set up a basic Linux VM in Azure. The
-Terraform code creates the necessary Azure boilerplate needed for a VM, and
-some basic LZ stuff.
-
-- Public IP for Compute VM
-- Network Interface for Compute VM
-  - IP from Default Subnet
-  - Public IP for Compute CM
-
-#### Future versions
+- Storage Account for Boot Diagnostics
+- Azure Linux Virtual Machine
+- Ubuntu 22.04 LTS
+  - Size: Standard_DS1_v2
+  - Network Interface for Compute VM
+    - Public IP for Compute VM
+    - IP from Default Subnet
+  - SSH Key Authentication
 
 The functionality will depend on what I am currently learning and sharing
 
