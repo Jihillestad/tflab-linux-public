@@ -9,6 +9,7 @@ resource "random_string" "main" {
   length  = 3
   special = false
   numeric = true
+  lower   = true
 }
 
 
