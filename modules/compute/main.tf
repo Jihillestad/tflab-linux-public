@@ -6,17 +6,18 @@
 # Random string for unique naming
 
 resource "random_string" "main" {
-  length  = 3
+  length  = 6
   special = false
   numeric = true
   lower   = true
+  upper   = false
 }
 
 
 # Storage Account for Boot Diagnostics
 
 resource "azurerm_storage_account" "boot_diagnostics_sa" {
-  name                = "${var.prefix}${var.project_name}btsa${random_string.main.result}"
+  name                = substr(lower("${var.prefix}${var.project_name}btsa${random_string.main.result}"), 0, 24) # Storage account names must be globally unique and between 3-24 characters. Overflow handled by substr function.
   resource_group_name = var.resource_group_name
   location            = var.location
 

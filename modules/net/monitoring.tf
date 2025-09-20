@@ -7,7 +7,8 @@ resource "azurerm_network_watcher" "main" {
 }
 
 resource "azurerm_storage_account" "nw_sa" {
-  name                = "${var.prefix}${var.project_name}nwsa${random_string.main.result}"
+
+  name                = substr(lower("${var.prefix}${var.project_name}nwsa${random_string.main.result}"), 0, 24) # Storage account names must be globally unique and between 3-24 characters. Overflow handled by substr function.
   resource_group_name = var.resource_group_name
   location            = var.location
 

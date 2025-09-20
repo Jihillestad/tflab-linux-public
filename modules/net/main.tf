@@ -6,8 +6,10 @@
 # Random string for unique naming
 
 resource "random_string" "main" {
-  length  = 4
+  length  = 6
   upper   = false
+  lower   = true
+  numeric = true
   special = false
 }
 
