@@ -1,5 +1,12 @@
 # Change Log
 
+## Version 1.0.1 - Patch release
+
+### Bug Fixes
+
+- Changed hardcoded values to variables in compute and net modules.
+- Added validation to important variables.
+
 ## Version 1.0.0 - Major release
 
 ## Features
