@@ -12,7 +12,7 @@ This repository contains a simplified single Resouce Group Azure Landing Zone (L
 
 ### Networking
 
-#### Version 0.1.1-2
+#### Version 0.1.1-3
 
 - Vnet with subnets:
   - Default subnet
@@ -30,7 +30,7 @@ This repository contains a simplified single Resouce Group Azure Landing Zone (L
 
 ### Compute
 
-#### Version 0.1.1-2
+#### Version 0.1.1-3
 
 This release is for showing how to set up a basic Linux VM in Azure. The
 Terraform code creates the necessary Azure boilerplate needed for a VM, and

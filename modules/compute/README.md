@@ -33,15 +33,18 @@ module "compute" {
 
 ## Inputs
 
-| Name                | Description                                                                       | Type          | Default | Required |
-| ------------------- | --------------------------------------------------------------------------------- | ------------- | ------- | -------- |
-| resource_group_name | (Required) The name of the resource group in which to create the resources.       | `string`      | n/a     | yes      |
-| location            | (Required) The Azure region where resources will be created.                      | `string`      | n/a     | yes      |
-| prefix              | (Required) Prefix for resource names.                                             | `string`      | n/a     | yes      |
-| project_name        | (Required) Project name for resource names.                                       | `string`      | n/a     | yes      |
-| environment         | (Required) Environment name for resource names.                                   | `string`      | n/a     | yes      |
-| subnet_id           | (Required) The ID of the Subnet to which the network interface will be connected. | `string`      | n/a     | yes      |
-| tags                | (Optional) A mapping of tags to assign to the resource.                           | `map(string)` | `{}`    | no       |
+| Name                | Description                                                                       | Type          | Default           | Required |
+| ------------------- | --------------------------------------------------------------------------------- | ------------- | ----------------- | -------- |
+| resource_group_name | (Required) The name of the resource group in which to create the resources.       | `string`      | n/a               | yes      |
+| location            | (Required) The Azure region where resources will be created.                      | `string`      | n/a               | yes      |
+| prefix              | (Required) Prefix for resource names.                                             | `string`      | n/a               | yes      |
+| project_name        | (Required) Project name for resource names.                                       | `string`      | n/a               | yes      |
+| username            | (Optional) Username for the VM.                                                   | `string`      |                   | no       |
+| size                | (Optional) Size of the VM.                                                        | `string`      | `Standard_DS1_v2` | no       |
+| environment         | (Required) Environment name for resource names.                                   | `string`      | n/a               | yes      |
+| subnet_id           | (Required) The ID of the Subnet to which the network interface will be connected. | `string`      | n/a               | yes      |
+| ssh_public_key      | (Optional) SSH Public Key for Linux VM authentication.                            | `string`      |                   | yes      |
+| tags                | (Optional) A mapping of tags to assign to the resource.                           | `map(string)` | `{}`              | no       |
 
 ## Outputs
 

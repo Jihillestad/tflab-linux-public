@@ -18,6 +18,17 @@ variable "project_name" {
   description = "The name of the project"
 }
 
+variable "username" {
+  type        = string
+  description = "The admin username for the VM"
+}
+
+variable "size" {
+  type        = string
+  description = "The size of the VM (e.g., Standard_DS1_v2)"
+  default     = "Standard_DS1_v2"
+}
+
 variable "environment" {
   type        = string
   description = "The environment for the resources (e.g., dev, prod)"
@@ -26,6 +37,11 @@ variable "environment" {
 variable "subnet_id" {
   type        = string
   description = "The ID of the subnet where the network interface will be created"
+}
+
+variable "ssh_public_key" {
+  description = "Path to the SSH public key for VM access"
+  type        = string
 }
 
 variable "tags" {

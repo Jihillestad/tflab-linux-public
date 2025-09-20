@@ -62,7 +62,6 @@ module "network" {
 | vnet_id           | The ID of the Virtual Network.           |
 | subnet_id         | The ID of the default Subnet.            |
 | subnet_name       | The name of the default Subnet.          |
-| bastion_subnet_id | The ID of the AzureBastionSubnet.        |
 | bastion_host_id   | The ID of the Azure Bastion Host.        |
 | bastion_host_name | The name of the Azure Bastion Host.      |
 | bastion_public_ip | The public IP of the Azure Bastion Host. |

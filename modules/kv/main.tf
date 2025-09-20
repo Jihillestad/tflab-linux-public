@@ -1,4 +1,12 @@
+# Terraform configuration for creating an Azure Key Vault and setting access policies
+
+
+# Fetch current Azure client configuration
+
 data "azurerm_client_config" "current" {}
+
+
+# Create the Key Vault
 
 resource "azurerm_key_vault" "main" {
   name                     = "${var.prefix}-${var.project_name}-kv-${var.environment}"
@@ -11,6 +19,9 @@ resource "azurerm_key_vault" "main" {
 
   tags = var.tags
 }
+
+
+# Set access policy for the current user/service principal to manage secrets
 
 resource "azurerm_key_vault_access_policy" "terraform-sp" {
   key_vault_id = azurerm_key_vault.main.id
