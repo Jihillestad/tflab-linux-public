@@ -40,6 +40,24 @@ resource "azurerm_network_security_group" "nsg1" {
       source_address_prefixes                    = azurerm_subnet.bastion_subnet.address_prefixes
       source_application_security_group_ids      = []
       source_port_ranges                         = []
+    },
+    {
+      name                                       = "http-inbound"
+      priority                                   = 1000
+      direction                                  = "Inbound"
+      access                                     = "Allow"
+      protocol                                   = "Tcp"
+      source_port_range                          = "*"
+      destination_port_range                     = "80"
+      source_address_prefix                      = "*"
+      destination_address_prefix                 = "*"
+      description                                = ""
+      destination_address_prefixes               = []
+      destination_application_security_group_ids = []
+      destination_port_ranges                    = []
+      source_address_prefixes                    = []
+      source_application_security_group_ids      = []
+      source_port_ranges                         = []
     }
   ]
 }
