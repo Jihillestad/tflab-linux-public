@@ -59,6 +59,20 @@ resource "azurerm_network_interface" "inet_nic" {
 }
 
 
+# Data Disk
+
+resource "azurerm_managed_disk" "webapp_data_disk" {
+  name                 = "${var.prefix}-${var.project_name}-data-disk-${random_string.main.result}-${var.environment}"
+  resource_group_name  = var.resource_group_name
+  location             = var.location
+  storage_account_type = "Standard_LRS"
+  create_option        = "Empty"
+  disk_size_gb         = 4
+
+  tags = var.tags
+}
+
+
 # Linux VM
 
 resource "azurerm_linux_virtual_machine" "ubuntu_vm1" {
@@ -95,4 +109,11 @@ resource "azurerm_linux_virtual_machine" "ubuntu_vm1" {
   }
 
   tags = var.tags
+}
+
+resource "azurerm_virtual_machine_data_disk_attachment" "example_disk_attachment" {
+  managed_disk_id    = azurerm_managed_disk.webapp_data_disk.id
+  virtual_machine_id = azurerm_linux_virtual_machine.ubuntu_vm1.id # Or azurerm_windows_virtual_machine.example.id
+  lun                = 0                                           # Must be a unique LUN for the VM
+  caching            = "None"
 }
