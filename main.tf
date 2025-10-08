@@ -40,20 +40,20 @@ module "network" {
 }
 
 
-# Create a network interface for the Linux VM. In future version tags, I'll
-# automate the creation of Compute resurces
+# Create a network interface for the Linux VM with secure ingress/egress
 
 module "vm" {
-  source              = "./modules/compute/"
-  resource_group_name = azurerm_resource_group.tflab_linux.name
-  location            = azurerm_resource_group.tflab_linux.location
-  username            = var.username
-  size                = var.size
-  prefix              = var.prefix
-  project_name        = var.project_name
-  environment         = var.environment
-  subnet_id           = module.network.subnet_id
-  ssh_public_key      = azurerm_key_vault_secret.ssh_public_key.value # Fetch the public key from Key Vault
+  source                  = "./modules/compute/"
+  resource_group_name     = azurerm_resource_group.tflab_linux.name
+  location                = azurerm_resource_group.tflab_linux.location
+  username                = var.username
+  size                    = var.size
+  prefix                  = var.prefix
+  project_name            = var.project_name
+  environment             = var.environment
+  subnet_id               = module.network.subnet_id
+  ssh_public_key          = azurerm_key_vault_secret.ssh_public_key.value # Fetch the public key from Key Vault
+  appgw_backend_pool_id   = module.network.appgw_backend_pool_id
 
   tags = local.common_tags
 }
