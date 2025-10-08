@@ -85,7 +85,7 @@ resource "azurerm_subnet" "bastion_subnet" {
   name                 = "AzureBastionSubnet"
   resource_group_name  = var.resource_group_name
   virtual_network_name = azurerm_virtual_network.vnet1.name
-  address_prefixes     = [cidrsubnet(tolist(azurerm_virtual_network.vnet1.address_space)[0], 10, 8)] # Dynamic /26 subnet to meet Bastion requirements
+  address_prefixes     = [cidrsubnet(tolist(azurerm_virtual_network.vnet1.address_space)[0], 10, 12)] # Dynamic /26 subnet to meet Bastion requirements
 }
 
 resource "azurerm_subnet_network_security_group_association" "default_rule1" {
