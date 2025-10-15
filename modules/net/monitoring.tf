@@ -1,3 +1,6 @@
+# Description: This Terraform configuration sets up Azure Network Watcher with Flow Logs and Traffic Analytics for a specified Virtual Network.
+
+# Create Network Watcher
 resource "azurerm_network_watcher" "main" {
   name                = "${var.prefix}-${var.project_name}-nw-${var.environment}"
   location            = var.location
@@ -6,6 +9,8 @@ resource "azurerm_network_watcher" "main" {
   tags = var.tags
 }
 
+
+# Create a Storage Account for Network Watcher Flow Logs
 resource "azurerm_storage_account" "nw_sa" {
 
   name                = substr(lower("${var.prefix}${var.project_name}nwsa${random_string.main.result}"), 0, 24) # Storage account names must be globally unique and between 3-24 characters. Overflow handled by substr function.
@@ -18,6 +23,8 @@ resource "azurerm_storage_account" "nw_sa" {
   https_traffic_only_enabled = true
 }
 
+
+# Enable Network Watcher Flow Logs with Traffic Analytics
 resource "azurerm_network_watcher_flow_log" "main" {
   network_watcher_name = azurerm_network_watcher.main.name
   resource_group_name  = var.resource_group_name

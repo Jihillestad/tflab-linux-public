@@ -5,7 +5,6 @@
 
 
 # Public IP for Bastion
-
 resource "azurerm_public_ip" "bastion_pip" {
   name                = "${var.prefix}-${var.project_name}-bastion-pip-${var.environment}"
   resource_group_name = var.resource_group_name
@@ -18,12 +17,11 @@ resource "azurerm_public_ip" "bastion_pip" {
 
 
 # Bastion Host
-
 resource "azurerm_bastion_host" "bastion" {
   name                = "${var.prefix}-${var.project_name}-bastion-${var.environment}"
   resource_group_name = var.resource_group_name
   location            = var.location
-  # dns_name            = "${var.prefix}-${var.project_name}-bastion-${var.environment}"
+
   sku = "Standard"
 
   ip_configuration {

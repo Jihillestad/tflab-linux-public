@@ -13,7 +13,6 @@ locals {
 
 
 # Create a single Azure resource group for simplicity
-
 resource "azurerm_resource_group" "tflab_linux" {
   name     = "${var.prefix}-${var.project_name}-rg-${var.environment}"
   location = var.location
@@ -23,7 +22,6 @@ resource "azurerm_resource_group" "tflab_linux" {
 
 
 # Building the network
-
 module "network" {
   source              = "./modules/net/"
   resource_group_name = azurerm_resource_group.tflab_linux.name
@@ -41,26 +39,24 @@ module "network" {
 
 
 # Create a network interface for the Linux VM with secure ingress/egress
-
 module "vm" {
-  source                  = "./modules/compute/"
-  resource_group_name     = azurerm_resource_group.tflab_linux.name
-  location                = azurerm_resource_group.tflab_linux.location
-  username                = var.username
-  size                    = var.size
-  prefix                  = var.prefix
-  project_name            = var.project_name
-  environment             = var.environment
-  subnet_id               = module.network.subnet_id
-  ssh_public_key          = azurerm_key_vault_secret.ssh_public_key.value # Fetch the public key from Key Vault
-  appgw_backend_pool_id   = module.network.appgw_backend_pool_id
+  source                = "./modules/compute/"
+  resource_group_name   = azurerm_resource_group.tflab_linux.name
+  location              = azurerm_resource_group.tflab_linux.location
+  username              = var.username
+  size                  = var.size
+  prefix                = var.prefix
+  project_name          = var.project_name
+  environment           = var.environment
+  subnet_id             = module.network.subnet_id
+  ssh_public_key        = azurerm_key_vault_secret.ssh_public_key.value # Fetch the public key from Key Vault
+  appgw_backend_pool_id = module.network.appgw_backend_pool_id
 
   tags = local.common_tags
 }
 
 
 # Create a Log Analytics Workspace for monitoring
-
 resource "azurerm_log_analytics_workspace" "law" {
   name                = "${var.prefix}-${var.project_name}-law-${var.environment}"
   location            = azurerm_resource_group.tflab_linux.location

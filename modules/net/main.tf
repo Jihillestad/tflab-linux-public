@@ -4,30 +4,22 @@
 
 locals {
 
-
   # Define subnets with dynamic address prefixes based on VNet address space
-
   subnets = {
 
-
     # Default Subnet for VMs and NAT Gateway
-
     default = {
       name   = "${var.prefix}-${var.project_name}-subnet-default-${var.environment}"
       prefix = cidrsubnet(tolist(azurerm_virtual_network.vnet1.address_space)[0], 8, 1) # Dynamic /24 subnet from /16 VNet
     }
 
-
     # Application Gateway Subnet
-
     appgw_subnet = {
       name   = "${var.prefix}-${var.project_name}-subnet-appgw-${var.environment}"
       prefix = cidrsubnet(tolist(azurerm_virtual_network.vnet1.address_space)[0], 8, 2) # Dynamic /24 subnet
     }
 
-
     # Bastion Subnet
-
     bastion_subnet = {
       name   = "AzureBastionSubnet"
       prefix = cidrsubnet(tolist(azurerm_virtual_network.vnet1.address_space)[0], 10, 12) # Dynamic /26 subnet to meet Bastion requirements
@@ -36,7 +28,6 @@ locals {
 }
 
 # Random string for unique naming
-
 resource "random_string" "main" {
   length  = 6
   upper   = false
@@ -47,7 +38,6 @@ resource "random_string" "main" {
 
 
 #Build the NSG with a rule to allow SSH
-
 resource "azurerm_network_security_group" "nsg1" {
   name                = "${var.prefix}-${var.project_name}-nsg-${var.environment}"
   resource_group_name = var.resource_group_name
@@ -78,7 +68,6 @@ resource "azurerm_network_security_group" "nsg1" {
 
 
 #Build the VNet and subnets
-
 resource "azurerm_virtual_network" "vnet1" {
   name                = "${var.prefix}-${var.project_name}-vnet-${var.environment}"
   address_space       = var.address_space
@@ -99,7 +88,6 @@ resource "azurerm_subnet" "this" {
 
 
 # Associate NSG with Default Subnet
-
 resource "azurerm_subnet_network_security_group_association" "default_rule1" {
   subnet_id                 = azurerm_subnet.this["default"].id
   network_security_group_id = azurerm_network_security_group.nsg1.id
