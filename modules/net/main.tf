@@ -2,6 +2,25 @@
 # with subnets and a Network Security Group (NSG) with a rule to allow SSH
 # access.
 
+locals {
+  subnets = {
+    default = {
+      name   = "${var.prefix}-${var.project_name}-subnet-default-${var.environment}"
+      nsg_id = azurerm_network_security_group.nsg1.id
+      prefix = cidrsubnet(tolist(azurerm_virtual_network.vnet1.address_space)[0], 8, 1) # Dynamic /24 subnet from /16 VNet
+    }
+    appgw_subnet = {
+      name   = "${var.prefix}-${var.project_name}-subnet-appgw-${var.environment}"
+      nsg_id = null
+      prefix = cidrsubnet(tolist(azurerm_virtual_network.vnet1.address_space)[0], 8, 2) # Dynamic /24 subnet
+    }
+    bastion_subnet = {
+      name   = "AzureBastionSubnet"
+      nsg_id = null
+      prefix = cidrsubnet(tolist(azurerm_virtual_network.vnet1.address_space)[0], 10, 12) # Dynamic /26 subnet to meet Bastion requirements
+    }
+  }
+}
 
 # Random string for unique naming
 
@@ -37,28 +56,10 @@ resource "azurerm_network_security_group" "nsg1" {
       destination_address_prefixes               = []
       destination_application_security_group_ids = []
       destination_port_ranges                    = []
-      source_address_prefixes                    = azurerm_subnet.bastion_subnet.address_prefixes
+      source_address_prefixes                    = azurerm_subnet.this["bastion_subnet"].address_prefixes
       source_application_security_group_ids      = []
       source_port_ranges                         = []
     },
-    {
-      name                                       = "http-inbound"
-      priority                                   = 1000
-      direction                                  = "Inbound"
-      access                                     = "Allow"
-      protocol                                   = "Tcp"
-      source_port_range                          = "*"
-      destination_port_range                     = "80"
-      source_address_prefix                      = "*"
-      destination_address_prefix                 = "*"
-      description                                = ""
-      destination_address_prefixes               = []
-      destination_application_security_group_ids = []
-      destination_port_ranges                    = []
-      source_address_prefixes                    = []
-      source_application_security_group_ids      = []
-      source_port_ranges                         = []
-    }
   ]
 }
 
@@ -74,37 +75,48 @@ resource "azurerm_virtual_network" "vnet1" {
   tags = var.tags
 }
 
+resource "azurerm_subnet" "this" {
+  for_each = local.subnets
+
+  name                 = each.value.name
+  resource_group_name  = var.resource_group_name
+  virtual_network_name = azurerm_virtual_network.vnet1.name
+  address_prefixes     = [each.value.prefix]
+}
 
 # Default Subnet for hosting VMs
 
-resource "azurerm_subnet" "default" {
-  name                 = "${var.prefix}-${var.project_name}-subnet-default-${var.environment}"
-  resource_group_name  = var.resource_group_name
-  virtual_network_name = azurerm_virtual_network.vnet1.name
-  address_prefixes     = [cidrsubnet(tolist(azurerm_virtual_network.vnet1.address_space)[0], 8, 1)] # Dynamic /24 subnet from /16 VNet
-}
+# resource "azurerm_subnet" "default" {
+#   name                 = "${var.prefix}-${var.project_name}-subnet-default-${var.environment}"
+#   resource_group_name  = var.resource_group_name
+#   virtual_network_name = azurerm_virtual_network.vnet1.name
+#   address_prefixes     = [cidrsubnet(tolist(azurerm_virtual_network.vnet1.address_space)[0], 8, 1)] # Dynamic /24 subnet from /16 VNet
+# }
 
 
-# Application Gateway Subnet
+# Application Gateway Subnets
 
-resource "azurerm_subnet" "appgw_subnet" {
-  name                 = "${var.prefix}-${var.project_name}-subnet-appgw-${var.environment}"
-  resource_group_name  = var.resource_group_name
-  virtual_network_name = azurerm_virtual_network.vnet1.name
-  address_prefixes     = [cidrsubnet(tolist(azurerm_virtual_network.vnet1.address_space)[0], 8, 2)] # Dynamic /24 subnet
-}
+# resource "azurerm_subnet" "appgw_subnet" {
+#   name                 = "${var.prefix}-${var.project_name}-subnet-appgw-${var.environment}"
+#   resource_group_name  = var.resource_group_name
+#   virtual_network_name = azurerm_virtual_network.vnet1.name
+#   address_prefixes     = [cidrsubnet(tolist(azurerm_virtual_network.vnet1.address_space)[0], 8, 2)] # Dynamic /24 subnet
+# }
 
 
 # Bastion Subnet (must be named "AzureBastionSubnet")
 
-resource "azurerm_subnet" "bastion_subnet" {
-  name                 = "AzureBastionSubnet"
-  resource_group_name  = var.resource_group_name
-  virtual_network_name = azurerm_virtual_network.vnet1.name
-  address_prefixes     = [cidrsubnet(tolist(azurerm_virtual_network.vnet1.address_space)[0], 10, 12)] # Dynamic /26 subnet to meet Bastion requirements
-}
+# resource "azurerm_subnet" "bastion_subnet" {
+#   name                 = "AzureBastionSubnet"
+#   resource_group_name  = var.resource_group_name
+#   virtual_network_name = azurerm_virtual_network.vnet1.name
+#   address_prefixes     = [cidrsubnet(tolist(azurerm_virtual_network.vnet1.address_space)[0], 10, 12)] # Dynamic /26 subnet to meet Bastion requirements
+# }
+
+
+# Associate NSG with Default Subnet
 
 resource "azurerm_subnet_network_security_group_association" "default_rule1" {
-  subnet_id                 = azurerm_subnet.default.id
+  subnet_id                 = azurerm_subnet.this["default"].id
   network_security_group_id = azurerm_network_security_group.nsg1.id
 }

@@ -5,12 +5,12 @@ output "vnet_id" {
 
 output "subnet_id" {
   description = "The ID of the created subnet"
-  value       = azurerm_subnet.default.id
+  value       = azurerm_subnet.this["default"].id
 }
 
 output "subnet_name" {
   description = "The name of the created subnet"
-  value       = azurerm_subnet.default.name
+  value       = azurerm_subnet.this["default"].name
 }
 
 output "bastion_host_id" {

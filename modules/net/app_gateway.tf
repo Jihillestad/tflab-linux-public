@@ -33,7 +33,7 @@ resource "azurerm_application_gateway" "appgw" {
 
   gateway_ip_configuration {
     name      = "appgw-ip-configuration"
-    subnet_id = azurerm_subnet.appgw_subnet.id
+    subnet_id = azurerm_subnet.this["appgw_subnet"].id
   }
 
   frontend_port {

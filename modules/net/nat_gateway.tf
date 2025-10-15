@@ -40,6 +40,6 @@ resource "azurerm_nat_gateway_public_ip_association" "nat_gateway_pip_associatio
 # Associate NAT Gateway with Default Subnet
 
 resource "azurerm_subnet_nat_gateway_association" "default_subnet_nat" {
-  subnet_id      = azurerm_subnet.default.id
+  subnet_id      = azurerm_subnet.this["default"].id
   nat_gateway_id = azurerm_nat_gateway.nat_gateway.id
 }
