@@ -3,20 +3,33 @@
 # access.
 
 locals {
+
+
+  # Define subnets with dynamic address prefixes based on VNet address space
+
   subnets = {
+
+
+    # Default Subnet for VMs and NAT Gateway
+
     default = {
       name   = "${var.prefix}-${var.project_name}-subnet-default-${var.environment}"
-      nsg_id = azurerm_network_security_group.nsg1.id
       prefix = cidrsubnet(tolist(azurerm_virtual_network.vnet1.address_space)[0], 8, 1) # Dynamic /24 subnet from /16 VNet
     }
+
+
+    # Application Gateway Subnet
+
     appgw_subnet = {
       name   = "${var.prefix}-${var.project_name}-subnet-appgw-${var.environment}"
-      nsg_id = null
       prefix = cidrsubnet(tolist(azurerm_virtual_network.vnet1.address_space)[0], 8, 2) # Dynamic /24 subnet
     }
+
+
+    # Bastion Subnet
+
     bastion_subnet = {
       name   = "AzureBastionSubnet"
-      nsg_id = null
       prefix = cidrsubnet(tolist(azurerm_virtual_network.vnet1.address_space)[0], 10, 12) # Dynamic /26 subnet to meet Bastion requirements
     }
   }
@@ -83,35 +96,6 @@ resource "azurerm_subnet" "this" {
   virtual_network_name = azurerm_virtual_network.vnet1.name
   address_prefixes     = [each.value.prefix]
 }
-
-# Default Subnet for hosting VMs
-
-# resource "azurerm_subnet" "default" {
-#   name                 = "${var.prefix}-${var.project_name}-subnet-default-${var.environment}"
-#   resource_group_name  = var.resource_group_name
-#   virtual_network_name = azurerm_virtual_network.vnet1.name
-#   address_prefixes     = [cidrsubnet(tolist(azurerm_virtual_network.vnet1.address_space)[0], 8, 1)] # Dynamic /24 subnet from /16 VNet
-# }
-
-
-# Application Gateway Subnets
-
-# resource "azurerm_subnet" "appgw_subnet" {
-#   name                 = "${var.prefix}-${var.project_name}-subnet-appgw-${var.environment}"
-#   resource_group_name  = var.resource_group_name
-#   virtual_network_name = azurerm_virtual_network.vnet1.name
-#   address_prefixes     = [cidrsubnet(tolist(azurerm_virtual_network.vnet1.address_space)[0], 8, 2)] # Dynamic /24 subnet
-# }
-
-
-# Bastion Subnet (must be named "AzureBastionSubnet")
-
-# resource "azurerm_subnet" "bastion_subnet" {
-#   name                 = "AzureBastionSubnet"
-#   resource_group_name  = var.resource_group_name
-#   virtual_network_name = azurerm_virtual_network.vnet1.name
-#   address_prefixes     = [cidrsubnet(tolist(azurerm_virtual_network.vnet1.address_space)[0], 10, 12)] # Dynamic /26 subnet to meet Bastion requirements
-# }
 
 
 # Associate NSG with Default Subnet
