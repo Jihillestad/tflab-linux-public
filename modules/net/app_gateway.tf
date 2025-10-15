@@ -3,14 +3,6 @@
 # capabilities, routing traffic to private backend VMs without exposing them directly.
 
 
-# Application Gateway Subnet
-
-resource "azurerm_subnet" "appgw_subnet" {
-  name                 = "${var.prefix}-${var.project_name}-subnet-appgw-${var.environment}"
-  resource_group_name  = var.resource_group_name
-  virtual_network_name = azurerm_virtual_network.vnet1.name
-  address_prefixes     = [cidrsubnet(tolist(azurerm_virtual_network.vnet1.address_space)[0], 8, 2)] # Dynamic /24 subnet
-}
 
 
 # Public IP for Application Gateway

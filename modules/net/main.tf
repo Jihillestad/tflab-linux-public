@@ -74,12 +74,28 @@ resource "azurerm_virtual_network" "vnet1" {
   tags = var.tags
 }
 
+
+# Default Subnet for hosting VMs
+
 resource "azurerm_subnet" "default" {
   name                 = "${var.prefix}-${var.project_name}-subnet-default-${var.environment}"
   resource_group_name  = var.resource_group_name
   virtual_network_name = azurerm_virtual_network.vnet1.name
   address_prefixes     = [cidrsubnet(tolist(azurerm_virtual_network.vnet1.address_space)[0], 8, 1)] # Dynamic /24 subnet from /16 VNet
 }
+
+
+# Application Gateway Subnet
+
+resource "azurerm_subnet" "appgw_subnet" {
+  name                 = "${var.prefix}-${var.project_name}-subnet-appgw-${var.environment}"
+  resource_group_name  = var.resource_group_name
+  virtual_network_name = azurerm_virtual_network.vnet1.name
+  address_prefixes     = [cidrsubnet(tolist(azurerm_virtual_network.vnet1.address_space)[0], 8, 2)] # Dynamic /24 subnet
+}
+
+
+# Bastion Subnet (must be named "AzureBastionSubnet")
 
 resource "azurerm_subnet" "bastion_subnet" {
   name                 = "AzureBastionSubnet"
