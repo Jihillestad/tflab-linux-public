@@ -42,22 +42,15 @@ module "network" {
 
 ## Inputs
 
-| Name                         | Description                                                                                                      | Type           | Default       | Required |
-| ---------------------------- | ---------------------------------------------------------------------------------------------------------------- | -------------- | ------------- | -------- |
-| resource_group_name          | (Required) The name of the resource group in which to create the resources.                                      | `string`       | n/a           | yes      |
-| location                     | (Required) The Azure region where resources will be created.                                                     | `string`       | n/a           | yes      |
-| prefix                       | (Required) Prefix for resource names.                                                                            | `string`       | n/a           | yes      |
-| project_name                 | (Required) Project name for resource names.                                                                      | `string`       | n/a           | yes      |
-| environment                  | (Required) Environment name for resource names.                                                                  | `string`       | n/a           | yes      |
-| address_space                | (Required) The address space that is used by the virtual network.                                                | `list(string)` | n/a           | yes      |
-| sa_account_tier              | (Optional) The Tier of the Storage Account. Possible values are: Standard, Premium.                              | `string`       | `"Standard"`  | no       |
-| sa_account_kind              | (Optional) The Kind of the Storage Account. Possible values are: Storage, StorageV2.                             | `string`       | `"StorageV2"` | no       |
-| sa_account_replication_type  | (Optional) The Replication type of the Storage Account. Possible values are: LRS, GRS, RAGRS, ZRS, GZRS, RAGZRS. | `string`       | `"LRS"`       | no       |
-| vnet_flow_log_retention_days | (Optional) The number of days to retain logs. Set to 0 for unlimited retention.                                  | `number`       | `7`           | no       |
-| law_id                       | (Required) The ID of the Log Analytics Workspace to link to the NSG.                                             | `string`       | n/a           | yes      |
-| law_workspace_id             | (Required) The Workspace ID of the Log Analytics Workspace to link to the NSG.                                   | `string`       | n/a           | yes      |
-| law_region                   | (Required) The region of the Log Analytics Workspace to link to the NSG.                                         | `string`       | n/a           | yes      |
-| tags                         | (Optional) A mapping of tags to assign to the resource.                                                          | `map(string)`  | `{}`          | no       |
+| Name                | Description                                                                 | Type           | Default | Required |
+| ------------------- | --------------------------------------------------------------------------- | -------------- | ------- | -------- |
+| resource_group_name | (Required) The name of the resource group in which to create the resources. | `string`       | n/a     | yes      |
+| location            | (Required) The Azure region where resources will be created.                | `string`       | n/a     | yes      |
+| prefix              | (Required) Prefix for resource names.                                       | `string`       | n/a     | yes      |
+| project_name        | (Required) Project name for resource names.                                 | `string`       | n/a     | yes      |
+| environment         | (Required) Environment name for resource names.                             | `string`       | n/a     | yes      |
+| address_space       | (Required) The address space that is used by the virtual network.           | `list(string)` | n/a     | yes      |
+| tags                | (Optional) A mapping of tags to assign to the resource.                     | `map(string)`  | `{}`    | no       |
 
 ## Outputs
 

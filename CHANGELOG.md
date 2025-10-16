@@ -1,5 +1,16 @@
 # Change Log
 
+## Version 2.1.1 - Patch release
+
+### Bug Fixes
+
+- Fixed missing outputs in ./modules/monitoring/outputs.tf
+- removed monitoring vars from net module.
+
+### Documentation
+
+- Updated README and CHANGELOG files with recent changes.
+
 ## Version 2.1.0 - Minor release
 
 ### Refactoring
