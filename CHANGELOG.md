@@ -1,6 +1,6 @@
 # Change Log
 
-## Version 2.0.3 - Patch release
+## Version 2.0.4 - Patch release
 
 ### Refactoring
 
