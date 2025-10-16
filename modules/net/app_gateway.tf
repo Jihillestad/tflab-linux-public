@@ -3,10 +3,7 @@
 # capabilities, routing traffic to private backend VMs without exposing them directly.
 
 
-
-
 # Public IP for Application Gateway
-
 resource "azurerm_public_ip" "appgw_pip" {
   name                = "${var.prefix}-${var.project_name}-appgw-pip-${var.environment}"
   resource_group_name = var.resource_group_name
@@ -19,7 +16,6 @@ resource "azurerm_public_ip" "appgw_pip" {
 
 
 # Application Gateway
-
 resource "azurerm_application_gateway" "appgw" {
   name                = "${var.prefix}-${var.project_name}-appgw-${var.environment}"
   resource_group_name = var.resource_group_name
