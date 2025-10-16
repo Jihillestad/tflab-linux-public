@@ -1,5 +1,22 @@
 # Change Log
 
+## Version 2.0.1 - Major release
+
+### Features
+
+#### Networking
+
+- Added Application Gateway with basic HTTP settings, listener, and routing rule.
+- Added NAT Gateway associated with Default Subnet for egress traffic.
+
+#### Refactoring
+
+- Refactored subnets to DRY and dynamic approach using maps and loops.
+
+#### Documentation
+
+- Added more comments for better readability and understanding.
+
 ## Version 1.0.1 - Patch release
 
 ### Bug Fixes
@@ -9,7 +26,7 @@
 
 ## Version 1.0.0 - Major release
 
-## Features
+### Features
 
 #### Compute
 

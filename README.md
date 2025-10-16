@@ -15,9 +15,18 @@ This repository contains a simplified single Resouce Group Azure Landing Zone (L
 - Vnet with subnets:
   - Default subnet
   - Bastion subnet
-  - Public IP for Bastion
+    - Public IP for Bastion
+  - Application Gateway subnet
 - Network Security Groups (NSGs) with basic rules:
-  - Allow SSH (port 22) inbound (Keeping it simple for lab usage)
+  - Allow SSH (port 22) from Bastion to Default Subnet
+- Ingress: Application Gateway
+  - Public IP for Application Gateway
+  - Basic HTTP settings
+  - Basic Listener
+  - Basic Routing Rule
+- Egress: NAT Gateway
+  - Public IP for NAT Gateway
+  - Associated with Default Subnet
 
 ### Monitoring
 
