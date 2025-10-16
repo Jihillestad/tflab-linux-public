@@ -4,7 +4,6 @@
 
 
 # Public IP for NAT Gateway
-
 resource "azurerm_public_ip" "nat_gateway_pip" {
   name                = "${var.prefix}-${var.project_name}-nat-pip-${var.environment}"
   resource_group_name = var.resource_group_name
@@ -17,7 +16,6 @@ resource "azurerm_public_ip" "nat_gateway_pip" {
 
 
 # NAT Gateway
-
 resource "azurerm_nat_gateway" "nat_gateway" {
   name                    = "${var.prefix}-${var.project_name}-nat-gateway-${var.environment}"
   resource_group_name     = var.resource_group_name
@@ -30,16 +28,17 @@ resource "azurerm_nat_gateway" "nat_gateway" {
 
 
 # Associate Public IP with NAT Gateway
-
 resource "azurerm_nat_gateway_public_ip_association" "nat_gateway_pip_association" {
   nat_gateway_id       = azurerm_nat_gateway.nat_gateway.id
   public_ip_address_id = azurerm_public_ip.nat_gateway_pip.id
 }
 
 
-# Associate NAT Gateway with Default Subnet
+# Dynamically associate NAT Gateway with subnets that have nat_enabled = true
+# This uses the local.subnets_with_nat map defined in main.tf
+resource "azurerm_subnet_nat_gateway_association" "nat_associations" {
+  for_each = local.subnets_with_nat
 
-resource "azurerm_subnet_nat_gateway_association" "default_subnet_nat" {
-  subnet_id      = azurerm_subnet.this["default"].id
+  subnet_id      = azurerm_subnet.this[each.key].id
   nat_gateway_id = azurerm_nat_gateway.nat_gateway.id
 }

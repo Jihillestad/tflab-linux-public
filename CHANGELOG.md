@@ -4,6 +4,17 @@
 
 ### Refactoring
 
+- Created NSG rules as a azurerm_network_security_rule resource instead of inline rules.
+- Made NAT and NSG toggles optional via variables.
+
+### Documentation
+
+- Added nsg_id output to ./modules/net/outputs.tf
+
+## Version 2.0.3 - Patch release
+
+### Refactoring
+
 - Improved ./modulules/net/outputs.tf for dynamic subnet outputs.
 - Added outputs in ./modules/net/outputs.tf for:
   - Application Gateway

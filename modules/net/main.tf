@@ -36,6 +36,15 @@ locals {
       prefix = cidrsubnet(tolist(azurerm_virtual_network.vnet1.address_space)[0], config.cidr_newbits, config.cidr_netnum)
     }
   }
+
+  # Helper maps for associations
+  subnets_with_nsg = {
+    for key, config in local.subnet_config : key => config if config.nsg_enabled
+  }
+
+  subnets_with_nat = {
+    for key, config in local.subnet_config : key => config if config.nat_enabled
+  }
 }
 
 
@@ -45,29 +54,32 @@ resource "azurerm_network_security_group" "nsg1" {
   resource_group_name = var.resource_group_name
   location            = var.location
 
-  # Allow SSH from Bastion subnet
-  security_rule = [
-    {
-      name                                       = "SSH"
-      priority                                   = 1001
-      direction                                  = "Inbound"
-      access                                     = "Allow"
-      protocol                                   = "Tcp"
-      source_port_range                          = "*"
-      destination_port_range                     = "22"
-      source_address_prefix                      = ""
-      destination_address_prefix                 = "*"
-      description                                = ""
-      destination_address_prefixes               = []
-      destination_application_security_group_ids = []
-      destination_port_ranges                    = []
-      source_address_prefixes                    = azurerm_subnet.this["bastion_subnet"].address_prefixes
-      source_application_security_group_ids      = []
-      source_port_ranges                         = []
-    },
-  ]
+  tags = var.tags
 }
 
+# NSG Rule: Allow SSH from Bastion subnet
+resource "azurerm_network_security_rule" "allow_ssh_from_bastion" {
+  name                        = "AllowSSHFromBastion"
+  priority                    = 1001
+  direction                   = "Inbound"
+  access                      = "Allow"
+  protocol                    = "Tcp"
+  source_port_range           = "*"
+  destination_port_range      = "22"
+  source_address_prefixes     = azurerm_subnet.this["bastion_subnet"].address_prefixes
+  destination_address_prefix  = "*"
+  resource_group_name         = var.resource_group_name
+  network_security_group_name = azurerm_network_security_group.nsg1.name
+  description                 = "Allow SSH access from Azure Bastion subnet"
+}
+
+# Associate NSG with subnets that have nsg_enabled = true
+resource "azurerm_subnet_network_security_group_association" "nsg_associations" {
+  for_each = local.subnets_with_nsg
+
+  subnet_id                 = azurerm_subnet.this[each.key].id
+  network_security_group_id = azurerm_network_security_group.nsg1.id # When more nsg's are needed, add the correct nsg as a key in the local.subnet_config
+}
 
 #Build the VNet and subnets
 resource "azurerm_virtual_network" "vnet1" {
@@ -86,11 +98,4 @@ resource "azurerm_subnet" "this" {
   resource_group_name  = var.resource_group_name
   virtual_network_name = azurerm_virtual_network.vnet1.name
   address_prefixes     = [each.value.prefix]
-}
-
-
-# Associate NSG with Default Subnet
-resource "azurerm_subnet_network_security_group_association" "default_rule1" {
-  subnet_id                 = azurerm_subnet.this["default"].id
-  network_security_group_id = azurerm_network_security_group.nsg1.id
 }

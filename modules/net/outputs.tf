@@ -22,7 +22,7 @@ output "subnet_names" {
   }
 }
 
-# Lagacy outputs for default subnet (Deprecated)
+# Legacy outputs for default subnet (Deprecated)
 output "subnet_id" {
   description = "The ID of the created subnet (deprecated, use subnet_ids output instead)"
   value       = azurerm_subnet.this["default"].id
@@ -86,8 +86,8 @@ output "appgw_subnet_id" {
   value       = azurerm_subnet.this["appgw_subnet"].id
 }
 
-# TODO: NSG Outputs
-# output "nsg_id" {
-#   description = "The ID of the Network Security Group"
-#   value       = azurerm_network_security_group.nsg1.id
-# }
+# NSG Outputs
+output "nsg_id" {
+  description = "The ID of the Network Security Group"
+  value       = azurerm_network_security_group.nsg1.id
+}
