@@ -82,6 +82,11 @@ variable "ssh_public_key" {
   type        = string
 }
 
+variable "appgw_backend_pool_id" {
+  type        = string
+  description = "The ID of the Application Gateway backend pool"
+}
+
 variable "tags" {
   description = "A map of tags to add to all resources"
   type        = map(string)

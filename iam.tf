@@ -1,5 +1,6 @@
-# Create an Azure Key Vault and store SSH keys as secrets
+# Description: This file contains the resources for IAM, including Key Vault and SSH key pair generation.
 
+# Create an Azure Key Vault 
 module "kv" {
   source              = "./modules/kv/"
   resource_group_name = azurerm_resource_group.tflab_linux.name
@@ -11,11 +12,15 @@ module "kv" {
   tags = local.common_tags
 }
 
+
+# Generate an SSH key pair
 resource "tls_private_key" "main" {
   algorithm = "RSA"
   rsa_bits  = 2048
 }
 
+
+# Store the SSH keys in the Key Vault as secrets
 resource "azurerm_key_vault_secret" "ssh_public_key" {
   key_vault_id = module.kv.kv_id
   name         = "ssh-public"
