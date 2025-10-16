@@ -34,6 +34,7 @@ resource "azurerm_network_watcher" "main" {
 
 # Create a Storage Account for Network Watcher Flow Logs
 resource "azurerm_storage_account" "nw_sa" {
+  # Storage account names must be globally unique and between 3-24 characters
   name                = substr(lower("${var.prefix}${var.project_name}nwsa${random_string.main.result}"), 0, 24) # Storage account names must be globally unique and between 3-24 characters. Overflow handled by substr function.
   resource_group_name = var.resource_group_name
   location            = var.location
@@ -42,6 +43,7 @@ resource "azurerm_storage_account" "nw_sa" {
   account_kind               = var.sa_account_kind
   account_replication_type   = var.sa_account_replication_type
   https_traffic_only_enabled = true
+  min_tls_version            = "TLS1_2" # Enforce TLS 1.2 for security compliance
 }
 
 
@@ -55,6 +57,7 @@ resource "azurerm_network_watcher_flow_log" "main" {
   target_resource_id = var.vnet_id # ID of the Virtual Network to monitor
   storage_account_id = azurerm_storage_account.nw_sa.id
   enabled            = true
+
   retention_policy {
     days    = var.vnet_flow_log_retention_days
     enabled = true
@@ -67,5 +70,7 @@ resource "azurerm_network_watcher_flow_log" "main" {
     workspace_resource_id = azurerm_log_analytics_workspace.law.id           # Link to the created Log Analytics Workspace
     interval_in_minutes   = 10
   }
+
+  tags = var.tags
 
 }
