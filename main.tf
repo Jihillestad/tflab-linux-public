@@ -30,9 +30,11 @@ module "network" {
   project_name        = var.project_name
   environment         = var.environment
   address_space       = ["10.0.0.0/16"]
-  law_id              = azurerm_log_analytics_workspace.law.id
-  law_workspace_id    = azurerm_log_analytics_workspace.law.workspace_id
-  law_region          = azurerm_log_analytics_workspace.law.location
+
+  # TODO: Refactor Log Analytics to its own monitoring module
+  law_id           = azurerm_log_analytics_workspace.law.id
+  law_workspace_id = azurerm_log_analytics_workspace.law.workspace_id
+  law_region       = azurerm_log_analytics_workspace.law.location
 
   tags = local.common_tags
 }

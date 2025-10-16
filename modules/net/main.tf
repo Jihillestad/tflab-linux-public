@@ -5,35 +5,37 @@
 locals {
 
   # Define subnets with dynamic address prefixes based on VNet address space
-  subnets = {
-
-    # Default Subnet for VMs and NAT Gateway
+  subnet_config = {
     default = {
-      name   = "${var.prefix}-${var.project_name}-subnet-default-${var.environment}"
-      prefix = cidrsubnet(tolist(azurerm_virtual_network.vnet1.address_space)[0], 8, 1) # Dynamic /24 subnet from /16 VNet
+      name         = "default"
+      cidr_newbits = 8
+      cidr_netnum  = 1
+      nsg_enabled  = true
+      nat_enabled  = true
     }
-
-    # Application Gateway Subnet
     appgw_subnet = {
-      name   = "${var.prefix}-${var.project_name}-subnet-appgw-${var.environment}"
-      prefix = cidrsubnet(tolist(azurerm_virtual_network.vnet1.address_space)[0], 8, 2) # Dynamic /24 subnet
+      name         = "appgw"
+      cidr_newbits = 8
+      cidr_netnum  = 2
+      nsg_enabled  = false
+      nat_enabled  = false
     }
-
-    # Bastion Subnet
     bastion_subnet = {
-      name   = "AzureBastionSubnet"
-      prefix = cidrsubnet(tolist(azurerm_virtual_network.vnet1.address_space)[0], 10, 12) # Dynamic /26 subnet to meet Bastion requirements
+      name         = "bastion"
+      cidr_newbits = 10
+      cidr_netnum  = 12
+      nsg_enabled  = false
+      nat_enabled  = false
     }
   }
-}
 
-# Random string for unique naming
-resource "random_string" "main" {
-  length  = 6
-  upper   = false
-  lower   = true
-  numeric = true
-  special = false
+  # Generate subnet configurations
+  subnets = {
+    for key, config in local.subnet_config : key => {
+      name   = config.name == "bastion" ? "AzureBastionSubnet" : "${var.prefix}-${var.project_name}-subnet-${config.name}-${var.environment}"
+      prefix = cidrsubnet(tolist(azurerm_virtual_network.vnet1.address_space)[0], config.cidr_newbits, config.cidr_netnum)
+    }
+  }
 }
 
 
