@@ -33,9 +33,9 @@ variable "environment" {
   }
 }
 
-variable "address_space" {
-  type        = list(string)
-  description = "The address space that is used by the Virtual Network"
+variable "vnet_id" {
+  description = "The ID of an existing Virtual Network to monitor"
+  type        = string
 }
 
 variable "sa_account_tier" {

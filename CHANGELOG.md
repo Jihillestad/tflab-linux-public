@@ -1,5 +1,15 @@
 # Change Log
 
+## Version 2.1.0 - Minor release
+
+### Refactoring
+
+- Monitoring resources created in a separate module: ./modules/monitoring
+
+### Documentation
+
+- Added monitoring module usage example to ./modules/monitoring/README.md
+
 ## Version 2.0.4 - Patch release
 
 ### Refactoring
