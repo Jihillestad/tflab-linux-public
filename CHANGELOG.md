@@ -1,5 +1,25 @@
 # Change Log
 
+## Version 2.0.3 - Patch release
+
+### Refactoring
+
+- Improved ./modulules/net/outputs.tf for dynamic subnet outputs.
+- Added outputs in ./modules/net/outputs.tf for:
+  - Application Gateway
+  - NAT Gateway
+  - Public IPs for Application Gateway and NAT Gateway
+
+### Documentation
+
+- Updated ./modules/net/README.md with new outputs.
+
+## Version 2.0.2 - Patch release
+
+### Documentation
+
+- Fixed outputs section in ./modules/net/README.md
+
 ## Version 2.0.1 - Major release
 
 ### Features
@@ -9,11 +29,11 @@
 - Added Application Gateway with basic HTTP settings, listener, and routing rule.
 - Added NAT Gateway associated with Default Subnet for egress traffic.
 
-#### Refactoring
+### Refactoring
 
 - Refactored subnets to DRY and dynamic approach using maps and loops.
 
-#### Documentation
+### Documentation
 
 - Added more comments for better readability and understanding.
 

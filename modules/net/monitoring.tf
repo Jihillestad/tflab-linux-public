@@ -1,5 +1,15 @@
 # Description: This Terraform configuration sets up Azure Network Watcher with Flow Logs and Traffic Analytics for a specified Virtual Network.
 
+
+# Create unique suffix for storage account name
+resource "random_string" "main" {
+  length  = 6
+  upper   = false
+  lower   = true
+  numeric = true
+  special = false
+}
+
 # Create Network Watcher
 resource "azurerm_network_watcher" "main" {
   name                = "${var.prefix}-${var.project_name}-nw-${var.environment}"
@@ -12,7 +22,6 @@ resource "azurerm_network_watcher" "main" {
 
 # Create a Storage Account for Network Watcher Flow Logs
 resource "azurerm_storage_account" "nw_sa" {
-
   name                = substr(lower("${var.prefix}${var.project_name}nwsa${random_string.main.result}"), 0, 24) # Storage account names must be globally unique and between 3-24 characters. Overflow handled by substr function.
   resource_group_name = var.resource_group_name
   location            = var.location
