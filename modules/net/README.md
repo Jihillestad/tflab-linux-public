@@ -78,3 +78,4 @@ module "network" {
 | appgw_public_ip         | The public IP of the Application Gateway.       |
 | appgw_backend_pool_id   | The ID of the Application Gateway backend pool. |
 | appgw_subnet_id         | The ID of the Application Gateway subnet.       |
+| nsg_id                  | The ID of the Network Security Group.           |
