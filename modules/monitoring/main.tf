@@ -10,6 +10,18 @@ resource "random_string" "main" {
   special = false
 }
 
+
+# Create a Log Analytics Workspace for monitoring
+resource "azurerm_log_analytics_workspace" "law" {
+  name                = "${var.prefix}-${var.project_name}-law-${var.environment}"
+  location            = var.location
+  resource_group_name = var.resource_group_name
+  sku                 = "PerGB2018"
+  retention_in_days   = 30
+
+  tags = var.tags
+}
+
 # Create Network Watcher
 resource "azurerm_network_watcher" "main" {
   name                = "${var.prefix}-${var.project_name}-nw-${var.environment}"
@@ -40,7 +52,7 @@ resource "azurerm_network_watcher_flow_log" "main" {
   name                 = "${var.prefix}-${var.project_name}-nw-fl-${var.environment}"
   location             = var.location
 
-  target_resource_id = azurerm_virtual_network.vnet1.id
+  target_resource_id = var.vnet_id # ID of the Virtual Network to monitor
   storage_account_id = azurerm_storage_account.nw_sa.id
   enabled            = true
   retention_policy {
@@ -50,9 +62,9 @@ resource "azurerm_network_watcher_flow_log" "main" {
 
   traffic_analytics {
     enabled               = true
-    workspace_id          = var.law_workspace_id
-    workspace_region      = var.law_region
-    workspace_resource_id = var.law_id
+    workspace_id          = azurerm_log_analytics_workspace.law.workspace_id # Link to the created Log Analytics Workspace
+    workspace_region      = azurerm_log_analytics_workspace.law.location     # Link to the created Log Analytics Workspace
+    workspace_resource_id = azurerm_log_analytics_workspace.law.id           # Link to the created Log Analytics Workspace
     interval_in_minutes   = 10
   }
 

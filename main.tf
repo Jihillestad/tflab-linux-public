@@ -31,11 +31,6 @@ module "network" {
   environment         = var.environment
   address_space       = ["10.0.0.0/16"]
 
-  # TODO: Refactor Log Analytics to its own monitoring module
-  law_id           = azurerm_log_analytics_workspace.law.id
-  law_workspace_id = azurerm_log_analytics_workspace.law.workspace_id
-  law_region       = azurerm_log_analytics_workspace.law.location
-
   tags = local.common_tags
 }
 
@@ -58,13 +53,15 @@ module "vm" {
 }
 
 
-# Create a Log Analytics Workspace for monitoring
-resource "azurerm_log_analytics_workspace" "law" {
-  name                = "${var.prefix}-${var.project_name}-law-${var.environment}"
-  location            = azurerm_resource_group.tflab_linux.location
+# Configure monitoring with Log Analytics and Network Watcher
+module "mon" {
+  source              = "./modules/monitoring/"
   resource_group_name = azurerm_resource_group.tflab_linux.name
-  sku                 = "PerGB2018"
-  retention_in_days   = 30
+  location            = azurerm_resource_group.tflab_linux.location
+  prefix              = var.prefix
+  project_name        = var.project_name
+  environment         = var.environment
+  vnet_id             = module.network.vnet_id
 
   tags = local.common_tags
 }
