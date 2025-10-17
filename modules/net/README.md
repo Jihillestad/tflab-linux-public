@@ -6,7 +6,7 @@ Creates an Azure network intended for Lab usage.
 
 ## Usage
 
-Pass a map of objecte defining the vnet and subnets.
+Pass a map of objects defining the vnet and subnets.
 
 ```hcl
 locals {
@@ -68,12 +68,12 @@ module "hub_network" {
 
 ## Inputs
 
-| Name                | Description                                                                 | Type           | Default | Required |
-| ------------------- | --------------------------------------------------------------------------- | -------------- | ------- | -------- |
-| resource_group_name | (Required) The name of the resource group in which to create the resources. | `string`       | n/a     | yes      |
-| location            | (Required) The Azure region where resources will be created.                | `string`       | n/a     | yes      |
-| address_space       | (Required) The address space that is used by the virtual network.           | `list(string)` | n/a     | yes      |
-| tags                | (Optional) A mapping of tags to assign to the resource.                     | `map(string)`  | `{}`    | no       |
+| Name                | Description                                                                 | Type          | Default | Required |
+| ------------------- | --------------------------------------------------------------------------- | ------------- | ------- | -------- |
+| resource_group_name | (Required) The name of the resource group in which to create the resources. | `string`      | n/a     | yes      |
+| location            | (Required) The Azure region where resources will be created.                | `string`      | n/a     | yes      |
+| vnet_config         | (Required) A map defining the Virtual Network and its subnets.              | `map(any)`    | n/a     | yes      |
+| tags                | (Optional) A mapping of tags to assign to the resource.                     | `map(string)` | `{}`    | no       |
 
 ## Outputs
 

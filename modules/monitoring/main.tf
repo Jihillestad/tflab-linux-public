@@ -10,6 +10,11 @@ resource "random_string" "main" {
   special = false
 }
 
+# Data source to get existing Network Watcher in the specified location
+data "azurerm_network_watcher" "main" {
+  name                = "NetworkWatcher_${var.location}"
+  resource_group_name = "NetworkWatcherRG"
+}
 
 # Create a Log Analytics Workspace for monitoring
 resource "azurerm_log_analytics_workspace" "law" {
@@ -21,16 +26,6 @@ resource "azurerm_log_analytics_workspace" "law" {
 
   tags = var.tags
 }
-
-# Create Network Watcher
-resource "azurerm_network_watcher" "main" {
-  name                = "${var.prefix}-${var.project_name}-nw-${var.environment}"
-  location            = var.location
-  resource_group_name = var.resource_group_name
-
-  tags = var.tags
-}
-
 
 # Create a Storage Account for Network Watcher Flow Logs
 resource "azurerm_storage_account" "nw_sa" {
@@ -46,11 +41,10 @@ resource "azurerm_storage_account" "nw_sa" {
   min_tls_version            = "TLS1_2" # Enforce TLS 1.2 for security compliance
 }
 
-
 # Enable Network Watcher Flow Logs with Traffic Analytics
 resource "azurerm_network_watcher_flow_log" "main" {
-  network_watcher_name = azurerm_network_watcher.main.name
-  resource_group_name  = var.resource_group_name
+  network_watcher_name = data.azurerm_network_watcher.main.name
+  resource_group_name  = data.azurerm_network_watcher.main.resource_group_name
   name                 = "${var.prefix}-${var.project_name}-nw-fl-${var.environment}"
   location             = var.location
 

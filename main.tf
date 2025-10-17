@@ -55,10 +55,7 @@ module "hub_network" {
   source              = "./modules/net/"
   resource_group_name = azurerm_resource_group.tflab_linux.name
   location            = azurerm_resource_group.tflab_linux.location
-  # prefix              = var.prefix
-  # project_name        = var.project_name
-  # environment         = var.environment
-  vnet_config = local.hub_vnet
+  vnet_config         = local.hub_vnet
 
   tags = local.common_tags
 }
