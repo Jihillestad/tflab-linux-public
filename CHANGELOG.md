@@ -1,5 +1,15 @@
 # Change Log
 
+## Version 2.2.1 - Patch release
+
+### Bug Fixes
+
+- Fixed network watccher conflict. Now using Azure builtin Network Watcher.
+
+### Refactoring
+
+- Fixed some typos and replaced some variables in ./modules/net/README.md
+
 ## Version 2.2.0 - Minor release
 
 ### Refactoring
