@@ -20,12 +20,12 @@ output "log_analytics_workspace_location" {
 
 output "network_watcher_id" {
   description = "The ID of the Network Watcher"
-  value       = azurerm_network_watcher.main.id
+  value       = data.azurerm_network_watcher.main.id
 }
 
 output "network_watcher_name" {
   description = "The name of the Network Watcher"
-  value       = azurerm_network_watcher.main.name
+  value       = data.azurerm_network_watcher.main.name
 }
 
 output "storage_account_id" {
