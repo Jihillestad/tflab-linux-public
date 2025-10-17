@@ -5,7 +5,7 @@
 
 # Public IP for NAT Gateway
 resource "azurerm_public_ip" "nat_gateway_pip" {
-  name                = "${var.prefix}-${var.project_name}-nat-pip-${var.environment}"
+  name                = "${var.vnet_config.name}-nat-pip"
   resource_group_name = var.resource_group_name
   location            = var.location
   allocation_method   = "Static"
@@ -17,7 +17,7 @@ resource "azurerm_public_ip" "nat_gateway_pip" {
 
 # NAT Gateway
 resource "azurerm_nat_gateway" "nat_gateway" {
-  name                    = "${var.prefix}-${var.project_name}-nat-gateway-${var.environment}"
+  name                    = "${var.vnet_config.name}-nat-gtw"
   resource_group_name     = var.resource_group_name
   location                = var.location
   sku_name                = "Standard"

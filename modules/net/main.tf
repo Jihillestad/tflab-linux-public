@@ -5,38 +5,15 @@
 locals {
 
   # Define subnets with dynamic address prefixes based on VNet address space
-  subnet_config = {
-    default = {
-      name         = "default"
-      cidr_newbits = 8
-      cidr_netnum  = 1
-      nsg_enabled  = true
-      nat_enabled  = true
-    }
-    appgw_subnet = {
-      name         = "appgw"
-      cidr_newbits = 8
-      cidr_netnum  = 2
-      nsg_enabled  = false
-      nat_enabled  = false
-    }
-    bastion_subnet = {
-      name         = "bastion"
-      cidr_newbits = 10
-      cidr_netnum  = 12
-      nsg_enabled  = false
-      nat_enabled  = false
-    }
-  }
+  subnet_config = var.vnet_config.subnets
 
   # Generate subnet configurations
   subnets = {
     for key, config in local.subnet_config : key => {
-      name   = config.name == "bastion" ? "AzureBastionSubnet" : "${var.prefix}-${var.project_name}-subnet-${config.name}-${var.environment}"
-      prefix = cidrsubnet(tolist(azurerm_virtual_network.vnet1.address_space)[0], config.cidr_newbits, config.cidr_netnum)
+      name   = config.name == "bastion" ? "AzureBastionSubnet" : "${var.vnet_config.name}-subnet-${config.name}"
+      prefix = cidrsubnet(var.vnet_config.address_space[0], config.cidr_newbits, config.cidr_netnum)
     }
   }
-
   # Helper maps for associations
   subnets_with_nsg = {
     for key, config in local.subnet_config : key => config if config.nsg_enabled
@@ -50,7 +27,7 @@ locals {
 
 #Build the NSG with a rule to allow SSH
 resource "azurerm_network_security_group" "nsg1" {
-  name                = "${var.prefix}-${var.project_name}-nsg-${var.environment}"
+  name                = "${var.vnet_config.name}-nsg"
   resource_group_name = var.resource_group_name
   location            = var.location
 
@@ -83,10 +60,10 @@ resource "azurerm_subnet_network_security_group_association" "nsg_associations" 
 
 #Build the VNet and subnets
 resource "azurerm_virtual_network" "vnet1" {
-  name                = "${var.prefix}-${var.project_name}-vnet-${var.environment}"
-  address_space       = var.address_space
+  name                = var.vnet_config.name
   resource_group_name = var.resource_group_name
   location            = var.location
+  address_space       = var.vnet_config.address_space
 
   tags = var.tags
 }

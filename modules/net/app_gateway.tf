@@ -5,7 +5,7 @@
 
 # Public IP for Application Gateway
 resource "azurerm_public_ip" "appgw_pip" {
-  name                = "${var.prefix}-${var.project_name}-appgw-pip-${var.environment}"
+  name                = "${var.vnet_config.name}-appgw-pip"
   resource_group_name = var.resource_group_name
   location            = var.location
   allocation_method   = "Static"
@@ -17,7 +17,7 @@ resource "azurerm_public_ip" "appgw_pip" {
 
 # Application Gateway
 resource "azurerm_application_gateway" "appgw" {
-  name                = "${var.prefix}-${var.project_name}-appgw-${var.environment}"
+  name                = "${var.vnet_config.name}-appgw"
   resource_group_name = var.resource_group_name
   location            = var.location
 

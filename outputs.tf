@@ -5,5 +5,5 @@
 
 output "bastion_host_name" {
   description = "The details of the Bastion Host"
-  value       = module.network.bastion_host_name
+  value       = module.hub_network.bastion_host_name
 }
