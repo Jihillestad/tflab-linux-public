@@ -6,19 +6,45 @@ Creates an Azure network intended for Lab usage.
 
 ## Usage
 
-```hcl
+Pass a map of objecte defining the vnet and subnets.
 
-module "network" {
+```hcl
+locals {
+  hub_vnet = {
+    name          = "${var.prefix}-${var.project_name}-vnet-hub-${var.environment}"
+    address_space = ["10.0.0.0/16"]
+
+    subnets = {
+      default = {
+        name         = "default"
+        cidr_newbits = 8
+        cidr_netnum  = 1
+        nsg_enabled  = true
+        nat_enabled  = true
+      }
+      appgw_subnet = {
+        name         = "appgw"
+        cidr_newbits = 8
+        cidr_netnum  = 2
+        nsg_enabled  = false
+        nat_enabled  = false
+      }
+      bastion_subnet = {
+        name         = "bastion"
+        cidr_newbits = 10
+        cidr_netnum  = 12
+        nsg_enabled  = false
+        nat_enabled  = false
+      }
+    }
+  }
+}
+
+module "hub_network" {
   source              = "./modules/net/"
   resource_group_name = azurerm_resource_group.tflab_linux.name
   location            = azurerm_resource_group.tflab_linux.location
-  prefix              = var.prefix
-  project_name        = var.project_name
-  environment         = var.environment
-  address_space       = ["10.0.0.0/16"]
-  law_id              = azurerm_log_analytics_workspace.law.id
-  law_workspace_id    = azurerm_log_analytics_workspace.law.workspace_id
-  law_region          = azurerm_log_analytics_workspace.law.location
+  vnet_config = local.hub_vnet
 
   tags = local.common_tags
 }
@@ -46,9 +72,6 @@ module "network" {
 | ------------------- | --------------------------------------------------------------------------- | -------------- | ------- | -------- |
 | resource_group_name | (Required) The name of the resource group in which to create the resources. | `string`       | n/a     | yes      |
 | location            | (Required) The Azure region where resources will be created.                | `string`       | n/a     | yes      |
-| prefix              | (Required) Prefix for resource names.                                       | `string`       | n/a     | yes      |
-| project_name        | (Required) Project name for resource names.                                 | `string`       | n/a     | yes      |
-| environment         | (Required) Environment name for resource names.                             | `string`       | n/a     | yes      |
 | address_space       | (Required) The address space that is used by the virtual network.           | `list(string)` | n/a     | yes      |
 | tags                | (Optional) A mapping of tags to assign to the resource.                     | `map(string)`  | `{}`    | no       |
 

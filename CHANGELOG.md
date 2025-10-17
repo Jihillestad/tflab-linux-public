@@ -1,5 +1,15 @@
 # Change Log
 
+## Version 2.2.0 - Minor release
+
+### Refactoring
+
+- Moved vnet and subnet definitions to root module for better network module reusability.
+
+### Documentation
+
+- Updated ./modules/net/README.md to reflect changes in module structure.
+
 ## Version 2.1.1 - Patch release
 
 ### Bug Fixes

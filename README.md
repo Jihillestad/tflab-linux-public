@@ -12,7 +12,7 @@ This repository contains a simplified single Resouce Group Azure Landing Zone (L
 
 ### Networking
 
-- Vnet with subnets:
+- Network Module: Hub Vnet with subnets:
   - Default subnet
   - Bastion subnet
     - Public IP for Bastion
