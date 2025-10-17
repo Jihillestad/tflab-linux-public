@@ -9,6 +9,35 @@ locals {
     Environment = var.environment
     Version     = var.env_version
   }
+
+  hub_vnet = {
+    name          = "${var.prefix}-${var.project_name}-vnet-hub-${var.environment}"
+    address_space = ["10.0.0.0/16"]
+
+    subnets = {
+      default = {
+        name         = "default"
+        cidr_newbits = 8
+        cidr_netnum  = 1
+        nsg_enabled  = true
+        nat_enabled  = true
+      }
+      appgw_subnet = {
+        name         = "appgw"
+        cidr_newbits = 8
+        cidr_netnum  = 2
+        nsg_enabled  = false
+        nat_enabled  = false
+      }
+      bastion_subnet = {
+        name         = "bastion"
+        cidr_newbits = 10
+        cidr_netnum  = 12
+        nsg_enabled  = false
+        nat_enabled  = false
+      }
+    }
+  }
 }
 
 
@@ -22,14 +51,14 @@ resource "azurerm_resource_group" "tflab_linux" {
 
 
 # Building the network
-module "network" {
+module "hub_network" {
   source              = "./modules/net/"
   resource_group_name = azurerm_resource_group.tflab_linux.name
   location            = azurerm_resource_group.tflab_linux.location
   prefix              = var.prefix
   project_name        = var.project_name
   environment         = var.environment
-  address_space       = ["10.0.0.0/16"]
+  vnet_config         = local.hub_vnet
 
   tags = local.common_tags
 }
@@ -45,9 +74,9 @@ module "vm" {
   prefix                = var.prefix
   project_name          = var.project_name
   environment           = var.environment
-  subnet_id             = module.network.subnet_id
+  subnet_id             = module.hub_network.subnet_id
   ssh_public_key        = azurerm_key_vault_secret.ssh_public_key.value # Fetch the public key from Key Vault
-  appgw_backend_pool_id = module.network.appgw_backend_pool_id
+  appgw_backend_pool_id = module.hub_network.appgw_backend_pool_id
 
   tags = local.common_tags
 }
@@ -61,7 +90,7 @@ module "mon" {
   prefix              = var.prefix
   project_name        = var.project_name
   environment         = var.environment
-  vnet_id             = module.network.vnet_id
+  vnet_id             = module.hub_network.vnet_id
 
   tags = local.common_tags
 }

@@ -33,10 +33,25 @@ variable "environment" {
   }
 }
 
-variable "address_space" {
-  type        = list(string)
-  description = "The address space that is used by the Virtual Network"
+variable "vnet_config" {
+  description = "Virtual Network configuration including name, address space, and subnets"
+  type = object({
+    name          = string
+    address_space = list(string)
+    subnets = map(object({
+      name         = string
+      cidr_newbits = number
+      cidr_netnum  = number
+      nsg_enabled  = bool
+      nat_enabled  = bool
+    }))
+  })
 }
+
+# variable "address_space" {
+#   type        = list(string)
+#   description = "The address space that is used by the Virtual Network"
+# }
 
 variable "tags" {
   description = "A map of tags to add to all resources"

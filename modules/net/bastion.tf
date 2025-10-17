@@ -6,7 +6,7 @@
 
 # Public IP for Bastion
 resource "azurerm_public_ip" "bastion_pip" {
-  name                = "${var.prefix}-${var.project_name}-bastion-pip-${var.environment}"
+  name                = "${var.vnet_config.name}-bastion-pip"
   resource_group_name = var.resource_group_name
   location            = var.location
   allocation_method   = "Static"
@@ -18,7 +18,7 @@ resource "azurerm_public_ip" "bastion_pip" {
 
 # Bastion Host
 resource "azurerm_bastion_host" "bastion" {
-  name                = "${var.prefix}-${var.project_name}-bastion-${var.environment}"
+  name                = "${var.vnet_config.name}-bastion"
   resource_group_name = var.resource_group_name
   location            = var.location
 
