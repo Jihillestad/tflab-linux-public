@@ -13,26 +13,6 @@ variable "location" {
   }
 }
 
-variable "prefix" {
-  description = "Prefix for resource names"
-  type        = string
-}
-
-variable "project_name" {
-  type        = string
-  description = "The name of the project"
-}
-
-variable "environment" {
-  type        = string
-  description = "The environment for the resources (e.g., dev, prod)"
-  default     = "dev"
-  validation {
-    condition     = contains(["dev", "test", "prod", "core"], var.environment)
-    error_message = "The environment must be one of: dev, test, prod, core."
-  }
-}
-
 variable "vnet_config" {
   description = "Virtual Network configuration including name, address space, and subnets"
   type = object({
@@ -47,11 +27,6 @@ variable "vnet_config" {
     }))
   })
 }
-
-# variable "address_space" {
-#   type        = list(string)
-#   description = "The address space that is used by the Virtual Network"
-# }
 
 variable "tags" {
   description = "A map of tags to add to all resources"
