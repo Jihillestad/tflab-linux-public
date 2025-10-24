@@ -1,7 +1,7 @@
-# output "ubuntu_vm1_public_ip" {
-#   description = "The public IP address of the Ubuntu virtual machine"
-#   value       = module.vm.inet_access_public_ip
-# }
+output "hub_rg_name" {
+  description = "The name of the Hub Resource Group"
+  value       = azurerm_resource_group.tflab_linux.name
+}
 
 output "vnet_id" {
   description = "The ID of the Virtual Network"
