@@ -1,5 +1,16 @@
 # Change Log
 
+## Version 2.3.1 - Minor release
+
+### Refactoring
+
+- Created a separate module for HUb services: ./modules/hubserv
+- Moved Bastion, Application Gateway, and NAT Gateway to the new hub services module.
+
+### Documentation
+
+- Updated README files to reflect the new module structure.
+
 ## Version 2.2.1 - Patch release
 
 ### Bug Fixes

@@ -10,6 +10,7 @@ locals {
     Version     = var.env_version
   }
 
+  # Hub VNet configuration
   hub_vnet = {
     name          = "${var.prefix}-${var.project_name}-vnet-hub-${var.environment}"
     address_space = ["10.0.0.0/16"]
@@ -70,9 +71,9 @@ module "hub_services" {
   appgw_subnet_id   = module.hub_network.subnet_ids["appgw_subnet"]
 
   # Subnets that should use NAT Gateway
-  nat_gateway_subnet_ids = [
-    module.hub_network.subnet_ids["default"]
-  ]
+  nat_gateway_subnets = {
+    default = module.hub_network.subnet_ids["default"]
+  }
 
   tags = local.common_tags
 }

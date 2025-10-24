@@ -23,12 +23,11 @@ variable "appgw_subnet_id" {
   description = "The ID of the subnet for Application Gateway"
 }
 
-variable "nat_gateway_subnet_ids" {
-  type        = list(string)
-  description = "List of subnet IDs to associate with the NAT Gateway"
-  default     = []
+variable "nat_gateway_subnets" {
+  type        = map(string)
+  description = "Map of subnet keys to subnet IDs for NAT Gateway association"
+  default     = {}
 }
-
 variable "tags" {
   description = "A map of tags to add to all resources"
   type        = map(string)

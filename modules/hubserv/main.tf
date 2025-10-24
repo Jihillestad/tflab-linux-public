@@ -62,14 +62,12 @@ resource "azurerm_nat_gateway_public_ip_association" "nat_gateway_pip_associatio
   public_ip_address_id = azurerm_public_ip.nat_gateway_pip.id
 }
 
-# Associate NAT Gateway with provided subnets
 resource "azurerm_subnet_nat_gateway_association" "nat_associations" {
-  for_each = toset(var.nat_gateway_subnet_ids)
+  for_each = var.nat_gateway_subnets
 
   subnet_id      = each.value
   nat_gateway_id = azurerm_nat_gateway.nat_gateway.id
 }
-
 # ------------------------------------------------------------------------------
 # APPLICATION GATEWAY
 # ------------------------------------------------------------------------------
