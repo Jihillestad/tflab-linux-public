@@ -156,7 +156,7 @@ export ARM_SUBSCRIPTION_ID="YOUR_SUBSCRIPTION_ID"
 ```hcl
 storage_account_name = "YOUR_TF_BACKEND_STORAGE_ACCOUNT_NAME"
 container_name = "tfstate" # Or whatever
-key="tflab-linux/terraform.tfstate"
+key = "tflab-linux/terraform.tfstate"
 ```
 
 ### 4. Deploy Infrastructure
@@ -285,7 +285,7 @@ locals {
 
   # Dev spoke VNet configuration
   spoke_vnet = {
-    name          = "${var.prefix}-${var.project_name}-vnet-dev-${var.environment}"
+    name          = "${var.prefix}-${var.project_name}-vnet-${var.environment}"
     address_space = ["10.1.0.0/16"]
     subnets = {
       default = {
@@ -355,6 +355,50 @@ terraform init -backend-config="dev.tfbackend"
 terraform validate
 terraform plan
 terraform apply
+```
+
+## 💰 Cost Considerations
+
+### Hub Infrastructure (Always Running)
+
+| Service            | Monthly Cost (Est.) | Notes                       |
+| ------------------ | ------------------- | --------------------------- |
+| Bastion Standard   | ~$140               | Shared across all spokes    |
+| NAT Gateway        | ~$33                | Plus data egress charges    |
+| App Gateway WAF_v2 | ~$240               | Minimum 2 instances for HA  |
+| Log Analytics      | ~$50                | Depends on ingestion volume |
+| Network Watcher    | ~$5                 | Flow logs storage extra     |
+| **Hub Total**      | **~$470/month**     | Shared by all environments  |
+
+### Per-Spoke Infrastructure
+
+| Service         | Monthly Cost (Est.) | Notes                     |
+| --------------- | ------------------- | ------------------------- |
+| VNet            | Free                | No charge for VNet itself |
+| VNet Peering    | ~$10                | Data transfer charges     |
+| NSGs            | Free                | No charge                 |
+| VMs             | Variable            | Depends on size and count |
+| **Spoke Total** | **~$10/month**      | Plus VM costs             |
+
+**Cost Optimization:**
+
+- Spokes only pay for VNet peering + their own resources
+- No duplication of Bastion, NAT, or AppGW ($413/spoke savings!)
+- Auto-shutdown VMs in dev/test during off-hours
+
+## 🧹 Cleanup
+
+To avoid ongoing charges, destroy resources when not in use:
+
+```bash
+# Destroy hub infrastructure
+terraform destroy
+
+# If you created spokes, destroy them first:
+cd env/dev
+terraform destroy
+cd ../..
+terraform destroy  # Then destroy hub
 ```
 
 ## 📚 Additional Resources
