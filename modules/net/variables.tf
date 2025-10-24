@@ -23,7 +23,6 @@ variable "vnet_config" {
       cidr_newbits = number
       cidr_netnum  = number
       nsg_enabled  = bool
-      nat_enabled  = bool
     }))
   })
 }

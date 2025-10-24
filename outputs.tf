@@ -3,7 +3,7 @@
 #   value       = module.vm.inet_access_public_ip
 # }
 
-output "bastion_host_name" {
-  description = "The details of the Bastion Host"
-  value       = module.hub_network.bastion_host_name
+output "vnet_id" {
+  description = "The ID of the Virtual Network"
+  value       = module.hub_network.vnet_id
 }

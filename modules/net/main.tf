@@ -18,10 +18,6 @@ locals {
   subnets_with_nsg = {
     for key, config in local.subnet_config : key => config if config.nsg_enabled
   }
-
-  subnets_with_nat = {
-    for key, config in local.subnet_config : key => config if config.nat_enabled
-  }
 }
 
 
