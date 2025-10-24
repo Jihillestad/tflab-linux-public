@@ -335,7 +335,7 @@ resource "azurerm_virtual_network_peering" "hub_to_spoke" {
 # VNet Peering: Spoke to Hub
 resource "azurerm_virtual_network_peering" "spoke_to_hub" {
   name                      = "dev-to-hub"
-  resource_group_name       = data.terraform_remote_state.hub.outputs.hub_rg_name
+  resource_group_name       = azurerm_resource_group.dev_aks_spoke_rg.name
   virtual_network_name      = module.spoke_network.vnet_name
   remote_virtual_network_id = data.terraform_remote_state.hub.outputs.hub_vnet_id
 
