@@ -1,6 +1,6 @@
 # tflab-linux
 
-This repository contains a simplified single Resouce Group Azure Landing Zone (LZ) setup intented for learning and experimentation purposes. It is not designed for production use.
+This repository contains a simplified single Resource Group Azure Landing Zone (LZ) setup intended for learning and experimentation purposes. It is not designed for production use.
 
 **Architecture:** Hub-and-Spoke pattern with modular Terraform design.
 
@@ -172,7 +172,9 @@ key="tflab-linux/terraform.tfstate"
 ## 🔄 Adding a Spoke VNet
 
 **Important! The example below is not implemented in this repository. You are
-welcome to use it as a starter for creating spokes in your own environment.**
+welcome to use it as a starter for creating spokes in your own repository.
+Create a folder and file structure like the examples below if you want to
+dive deeper into hub-and-spoke topology.**
 
 ### Folder Structure
 
@@ -302,11 +304,18 @@ locals {
   }
 }
 
+resource "azurerm_resource_group" "dev_aks_spoke_rg" {
+  name     = "${var.prefix}-${var.project_name}-rg-${var.environment}"
+  location = var.location
+
+  tags = local.common_tags
+}
+
 # Spoke network (no hub services)
 module "spoke_network" {
   source = "../../modules/net/"
 
-  resource_group_name = data.terraform_remote_state.hub.outputs.resource_group_name
+  resource_group_name = azurerm_resource_group.dev_aks_spoke_rg.name
   location            = var.location
   vnet_config         = local.spoke_vnet
   tags                = local.common_tags
