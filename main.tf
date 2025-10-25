@@ -10,6 +10,7 @@ locals {
     Version     = var.env_version
   }
 
+  # Hub VNet configuration
   hub_vnet = {
     name          = "${var.prefix}-${var.project_name}-vnet-hub-${var.environment}"
     address_space = ["10.0.0.0/16"]
@@ -20,21 +21,18 @@ locals {
         cidr_newbits = 8
         cidr_netnum  = 1
         nsg_enabled  = true
-        nat_enabled  = true
       }
       appgw_subnet = {
         name         = "appgw"
         cidr_newbits = 8
         cidr_netnum  = 2
         nsg_enabled  = false
-        nat_enabled  = false
       }
       bastion_subnet = {
         name         = "bastion"
         cidr_newbits = 10
         cidr_netnum  = 12
         nsg_enabled  = false
-        nat_enabled  = false
       }
     }
   }
@@ -60,6 +58,26 @@ module "hub_network" {
   tags = local.common_tags
 }
 
+# Hub Services (Bastion, NAT Gateway, App Gateway)
+module "hub_services" {
+  source = "./modules/hubserv/"
+
+  resource_group_name = azurerm_resource_group.tflab_linux.name
+  location            = azurerm_resource_group.tflab_linux.location
+  hub_vnet_name       = local.hub_vnet.name
+
+  # Subnet references from hub network module
+  bastion_subnet_id = module.hub_network.subnet_ids["bastion_subnet"]
+  appgw_subnet_id   = module.hub_network.subnet_ids["appgw_subnet"]
+
+  # Subnets that should use NAT Gateway
+  nat_gateway_subnets = {
+    default = module.hub_network.subnet_ids["default"]
+  }
+
+  tags = local.common_tags
+}
+
 
 # Create a network interface for the Linux VM with secure ingress/egress
 module "vm" {
@@ -73,7 +91,7 @@ module "vm" {
   environment           = var.environment
   subnet_id             = module.hub_network.subnet_id
   ssh_public_key        = azurerm_key_vault_secret.ssh_public_key.value # Fetch the public key from Key Vault
-  appgw_backend_pool_id = module.hub_network.appgw_backend_pool_id
+  appgw_backend_pool_id = module.hub_services.appgw_backend_pool_id
 
   tags = local.common_tags
 }
