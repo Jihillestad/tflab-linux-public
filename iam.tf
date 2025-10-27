@@ -1,4 +1,9 @@
 # Description: This file contains the resources for IAM, including Key Vault and SSH key pair generation.
+# DANGER: The secrets are stored in Terraform state files in plain text. Ensure state files are securely managed.
+# DO NOT use in production environments. This is for learning and testing purposes only. 
+# In production environments, keey the secrets out of Terraform state.
+# ------------------------------------------------------------------------------
+
 
 # Create an Azure Key Vault 
 module "kv" {
@@ -13,7 +18,7 @@ module "kv" {
 }
 
 
-# Generate an SSH key pair
+# Generate an SSH key pair.
 resource "tls_private_key" "main" {
   algorithm = "RSA"
   rsa_bits  = 2048
