@@ -1,5 +1,12 @@
 # Key Vault Module
 
+## Disclaimer
+
+This module is intended for lab use and may not adhere to production best
+practices. If adding secrets to the key vault with Terraform, be aware that the
+secrets will be stored in the Terraform state file in plain text. Exercise
+caution when using this module in production environments.
+
 ## Description
 
 Creates an Azure Key Vault with necessary configurations.

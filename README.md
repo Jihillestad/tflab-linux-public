@@ -1,6 +1,7 @@
 # tflab-linux
 
 This repository contains a simplified single Resource Group Azure Landing Zone (LZ) setup intended for learning and experimentation purposes. It is not designed for production use.
+**The SSH key pair is stored in plain text in Terraform state. Use for lab and learning only, deploy Key Vaults and Secrets outside Terraform in production environments.**
 
 **Architecture:** Hub-and-Spoke pattern with modular Terraform design.
 
@@ -80,6 +81,8 @@ Shared infrastructure services deployed once in the hub:
   - SSH Key Authentication
 
 ### IAM & Security
+
+**Security warning: The SSH key pair is stored in plain text in Terraform State. Use for lab only.**
 
 - Azure Key Vault
   - SSH private key (stored securely)
