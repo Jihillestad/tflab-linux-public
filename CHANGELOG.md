@@ -1,5 +1,11 @@
 # Change Log
 
+## Version 2.3.6 - Patch release
+
+### Features
+
+- Improved variable naming consistency across modules. Made vm image variables dynamic.
+
 ## Version 2.3.5 - Patch release
 
 ### Bug Fixes
