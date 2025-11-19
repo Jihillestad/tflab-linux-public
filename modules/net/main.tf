@@ -22,7 +22,7 @@ locals {
 
 
 #Build the NSG with a rule to allow SSH
-resource "azurerm_network_security_group" "nsg1" {
+resource "azurerm_network_security_group" "this" {
   name                = "${var.vnet_config.name}-nsg"
   resource_group_name = var.resource_group_name
   location            = var.location
@@ -42,7 +42,7 @@ resource "azurerm_network_security_rule" "allow_ssh_from_bastion" {
   source_address_prefixes     = azurerm_subnet.this["bastion_subnet"].address_prefixes
   destination_address_prefix  = "*"
   resource_group_name         = var.resource_group_name
-  network_security_group_name = azurerm_network_security_group.nsg1.name
+  network_security_group_name = azurerm_network_security_group.this.name
   description                 = "Allow SSH access from Azure Bastion subnet"
 }
 
@@ -55,7 +55,7 @@ resource "azurerm_subnet_network_security_group_association" "nsg_associations" 
 }
 
 #Build the VNet and subnets
-resource "azurerm_virtual_network" "vnet1" {
+resource "azurerm_virtual_network" "this" {
   name                = var.vnet_config.name
   resource_group_name = var.resource_group_name
   location            = var.location
@@ -69,6 +69,6 @@ resource "azurerm_subnet" "this" {
 
   name                 = each.value.name
   resource_group_name  = var.resource_group_name
-  virtual_network_name = azurerm_virtual_network.vnet1.name
+  virtual_network_name = azurerm_virtual_network.this.name
   address_prefixes     = [each.value.prefix]
 }

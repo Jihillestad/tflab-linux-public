@@ -18,7 +18,7 @@ resource "azurerm_public_ip" "bastion_pip" {
   tags = var.tags
 }
 
-resource "azurerm_bastion_host" "bastion" {
+resource "azurerm_bastion_host" "hub_bastion" {
   name                = "${var.hub_vnet_name}-bastion"
   resource_group_name = var.resource_group_name
   location            = var.location
