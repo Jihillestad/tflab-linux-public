@@ -81,7 +81,7 @@ resource "azurerm_managed_disk" "webapp_data_disk" {
 
 
 # Linux VM
-resource "azurerm_linux_virtual_machine" "ubuntu_vm1" {
+resource "azurerm_linux_virtual_machine" "test_vm1" {
   name                = "${var.prefix}-${var.project_name}-vm-${random_string.main.result}-${var.environment}"
   resource_group_name = var.resource_group_name
   location            = var.location
@@ -104,10 +104,10 @@ resource "azurerm_linux_virtual_machine" "ubuntu_vm1" {
   }
 
   source_image_reference {
-    publisher = "Canonical"
-    offer     = "0001-com-ubuntu-server-jammy"
-    sku       = "22_04-lts"
-    version   = "latest"
+    publisher = var.vm_image.publisher
+    offer     = var.vm_image.offer
+    sku       = var.vm_image.sku
+    version   = var.vm_image.version
   }
 
   boot_diagnostics {

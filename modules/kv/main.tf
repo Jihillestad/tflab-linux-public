@@ -7,11 +7,12 @@ data "azurerm_client_config" "current" {}
 
 # Create the Key Vault
 resource "azurerm_key_vault" "main" {
-  name                     = "${var.prefix}-${var.project_name}-kv-${var.environment}"
-  resource_group_name      = var.resource_group_name
-  location                 = var.location
-  tenant_id                = data.azurerm_client_config.current.tenant_id
-  purge_protection_enabled = false
+  name                       = "${var.prefix}-${var.project_name}-kv-${var.environment}"
+  resource_group_name        = var.resource_group_name
+  location                   = var.location
+  tenant_id                  = data.azurerm_client_config.current.tenant_id
+  purge_protection_enabled   = false
+  soft_delete_retention_days = 7
 
   sku_name = "standard"
 

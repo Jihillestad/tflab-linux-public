@@ -1,11 +1,11 @@
 output "vnet_id" {
   description = "The ID of the created virtual network"
-  value       = azurerm_virtual_network.vnet1.id
+  value       = azurerm_virtual_network.this.id
 }
 
 output "vnet_name" {
   description = "The name of the created virtual network"
-  value       = azurerm_virtual_network.vnet1.name
+  value       = azurerm_virtual_network.this.name
 }
 
 output "subnet_ids" {
@@ -36,5 +36,5 @@ output "subnet_name" {
 # NSG Outputs
 output "nsg_id" {
   description = "The ID of the Network Security Group"
-  value       = azurerm_network_security_group.nsg1.id
+  value       = azurerm_network_security_group.this.id
 }

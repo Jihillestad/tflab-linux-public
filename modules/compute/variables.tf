@@ -37,6 +37,22 @@ variable "username" {
   description = "The admin username for the VM"
 }
 
+variable "vm_image" {
+  description = "VM image reference"
+  type = object({
+    publisher = string
+    offer     = string
+    sku       = string
+    version   = string
+  })
+  default = {
+    publisher = "Canonical"
+    offer     = "0001-com-ubuntu-server-jammy"
+    sku       = "22_04-lts"
+    version   = "latest"
+  }
+}
+
 variable "sa_account_tier" {
   description = "The Tier of the Storage Account (Standard or Premium)"
   type        = string
