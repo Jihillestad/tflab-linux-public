@@ -19,7 +19,7 @@ variable "prefix" {
 
   validation {
     condition     = length(var.prefix) <= 6
-    error_message = "Prefix must be 10 characters or less to fit storage account naming (24 char limit)."
+    error_message = "Prefix must be 6 characters or less to fit storage account naming (24 char limit)."
   }
 }
 
