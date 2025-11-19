@@ -2,7 +2,7 @@
 # The network interface is configured with a private IP only (no public IP)
 # and is associated with Application Gateway backend pool for secure ingress.
 
-# Loval variables for storage account name construction and overflow safety
+# Local variables for storage account name construction and overflow safety
 locals {
   # Calculate components separately for clarity
   storage_prefix = lower("${var.prefix}${var.project_name}btsa")

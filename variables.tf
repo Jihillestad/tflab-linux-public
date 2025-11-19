@@ -3,7 +3,7 @@ variable "prefix" {
   type        = string
   default     = "jih"
   validation {
-    condition     = length(var.prefix) <= 10
+    condition     = length(var.prefix) <= 6
     error_message = "Prefix must be 10 characters or less to fit storage account naming (24 char limit)."
   }
 }

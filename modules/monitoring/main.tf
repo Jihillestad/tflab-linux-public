@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------
 
 
-# Loval variables for storage account name construction and overflow safety
+# Local variables for storage account name construction and overflow safety
 locals {
   # Calculate components separately for clarity
   storage_prefix = lower("${var.prefix}${var.project_name}nwsa")
