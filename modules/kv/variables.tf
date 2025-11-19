@@ -41,6 +41,23 @@ variable "environment" {
   }
 }
 
+variable "purge_protection_enabled" {
+  description = "Enable purge protection for the Key Vault"
+  type        = bool
+  default     = false
+}
+
+variable "soft_delete_retention_days" {
+  description = "Number of days to retain deleted Key Vaults"
+  type        = number
+  default     = 7
+
+  validation {
+    condition     = var.soft_delete_retention_days >= 7 && var.soft_delete_retention_days <= 90
+    error_message = "Soft delete retention must be between 7 and 90 days."
+  }
+}
+
 variable "tags" {
   description = "A map of tags to add to all resources"
   type        = map(string)

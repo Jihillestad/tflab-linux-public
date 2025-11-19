@@ -1,5 +1,12 @@
 # Change Log
 
+## Verssion 2.3.7 - Patch release
+
+### Features
+
+- Configured Soft Delete Retention Days for Key Vault
+- Retention days and purge protection made configurable via variables
+
 ## Version 2.3.6 - Patch release
 
 ### Features
