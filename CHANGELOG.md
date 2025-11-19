@@ -1,10 +1,22 @@
 # Change Log
 
+## Version 2.3.3 - Patch release
+
+### Bug Fixes
+
+- Fixed Application Gateway Health Probe configuration.
+
+## Version 2.3.2 - Patch release
+
+### Documentation
+
+- Added SSH in Terraform State security warnings
+
 ## Version 2.3.1 - Minor release
 
 ### Refactoring
 
-- Created a separate module for HUb services: ./modules/hubserv
+- Created a separate module for Hub services: ./modules/hubserv
 - Moved Bastion, Application Gateway, and NAT Gateway to the new hub services module.
 
 ### Documentation
