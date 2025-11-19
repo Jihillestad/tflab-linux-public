@@ -1,5 +1,11 @@
 # Change Log
 
+## Version 2.3.5 - Patch release
+
+### Bug Fixes
+
+- Fixed minor typos
+
 ## Version 2.3.4 - Patch release
 
 ### Bug Fixes
