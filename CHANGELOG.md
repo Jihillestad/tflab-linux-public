@@ -1,5 +1,14 @@
 # Change Log
 
+## Version 2.3.4 - Patch release
+
+### Bug Fixes
+
+- Allowed minor version upgrade for azurerm provider
+- Terraform version set to >= 1.5
+- Fixed various typos
+- Improved overflow handling for storage account names
+
 ## Version 2.3.3 - Patch release
 
 ### Bug Fixes
