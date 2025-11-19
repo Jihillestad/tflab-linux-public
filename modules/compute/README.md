@@ -39,7 +39,8 @@ module "compute" {
 | location                    | (Required) The Azure region where resources will be created.                                                     | `string`      | n/a               | yes      |
 | prefix                      | (Required) Prefix for resource names.                                                                            | `string`      | n/a               | yes      |
 | project_name                | (Required) Project name for resource names.                                                                      | `string`      | n/a               | yes      |
-| username                    | (Optional) Username for the VM.                                                                                  | `string`      |                   | no       |
+| username                    | (Optional) Username for the VM.                                                                                  | `string`      | n/a               | no       |
+| vm_image                    | (Optional) The VM Image to use.                                                                                  | `object()`    | n/a               | no       |
 | sa_account_tier             | (Optional) The Tier of the Storage Account. Possible values are: Standard, Premium.                              | `string`      | `"Standard"`      | no       |
 | sa_account_kind             | (Optional) The Kind of the Storage Account. Possible values are: Storage, StorageV2.                             | `string`      | `"StorageV2"`     | no       |
 | sa_account_replication_type | (Optional) The Replication type of the Storage Account. Possible values are: LRS, GRS, RAGRS, ZRS, GZRS, RAGZRS. | `string`      | `"LRS"`           | no       |
