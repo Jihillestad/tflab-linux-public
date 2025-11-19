@@ -1,5 +1,17 @@
 # Description: This Terraform configuration sets up Azure Network Watcher with Flow Logs and Traffic Analytics for a specified Virtual Network.
 
+# ------------------------------------------------------------------------------
+
+
+# Loval variables for storage account name construction and overflow safety
+locals {
+  # Calculate components separately for clarity
+  storage_prefix = lower("${var.prefix}${var.project_name}nwsa")
+  storage_suffix = random_string.main.result
+
+  # Total length will be prefix + suffix
+  storage_name_length = length(local.storage_prefix) + length(local.storage_suffix)
+}
 
 # Create unique suffix for storage account name
 resource "random_string" "main" {
@@ -29,8 +41,7 @@ resource "azurerm_log_analytics_workspace" "law" {
 
 # Create a Storage Account for Network Watcher Flow Logs
 resource "azurerm_storage_account" "nw_sa" {
-  # Storage account names must be globally unique and between 3-24 characters
-  name                = substr(lower("${var.prefix}${var.project_name}nwsa${random_string.main.result}"), 0, 24) # Storage account names must be globally unique and between 3-24 characters. Overflow handled by substr function.
+  name                = "${local.storage_prefix}${local.storage_suffix}"
   resource_group_name = var.resource_group_name
   location            = var.location
 
@@ -38,7 +49,15 @@ resource "azurerm_storage_account" "nw_sa" {
   account_kind               = var.sa_account_kind
   account_replication_type   = var.sa_account_replication_type
   https_traffic_only_enabled = true
-  min_tls_version            = "TLS1_2" # Enforce TLS 1.2 for security compliance
+  min_tls_version            = "TLS1_2" // Enforce TLS 1.2 for security compliance
+
+  # Overflow protection for storage account name length
+  lifecycle {
+    precondition {
+      condition     = local.storage_name_length <= 24
+      error_message = "Storage account name would exceed 24 characters: ${local.storage_name_length}"
+    }
+  }
 }
 
 # Enable Network Watcher Flow Logs with Traffic Analytics
@@ -48,7 +67,7 @@ resource "azurerm_network_watcher_flow_log" "main" {
   name                 = "${var.prefix}-${var.project_name}-nw-fl-${var.environment}"
   location             = var.location
 
-  target_resource_id = var.vnet_id # ID of the Virtual Network to monitor
+  target_resource_id = var.vnet_id // ID of the Virtual Network to monitor
   storage_account_id = azurerm_storage_account.nw_sa.id
   enabled            = true
 
@@ -59,12 +78,11 @@ resource "azurerm_network_watcher_flow_log" "main" {
 
   traffic_analytics {
     enabled               = true
-    workspace_id          = azurerm_log_analytics_workspace.law.workspace_id # Link to the created Log Analytics Workspace
-    workspace_region      = azurerm_log_analytics_workspace.law.location     # Link to the created Log Analytics Workspace
-    workspace_resource_id = azurerm_log_analytics_workspace.law.id           # Link to the created Log Analytics Workspace
+    workspace_id          = azurerm_log_analytics_workspace.law.workspace_id // Link to the created Log Analytics Workspace
+    workspace_region      = azurerm_log_analytics_workspace.law.location     // Link to the created Log Analytics Workspace
+    workspace_resource_id = azurerm_log_analytics_workspace.law.id           // Link to the created Log Analytics Workspace
     interval_in_minutes   = 10
   }
 
   tags = var.tags
-
 }

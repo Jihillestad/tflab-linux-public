@@ -211,7 +211,7 @@ key                  = "tflab-linux/dev/terraform.tfstate"
 prefix       = "myorg"
 project_name = "linuxlab"
 environment  = "dev"
-env_version  = "0.0.1"
+env_version  = "v0.0.1"
 location     = "norwayeast"
 username     = "azureuser"
 ```
