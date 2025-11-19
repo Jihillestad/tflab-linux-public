@@ -1,7 +1,7 @@
 # Bastion Outputs
 output "bastion_id" {
   description = "The ID of the Azure Bastion Host"
-  value       = azurerm_bastion_host.bastion.id
+  value       = azurerm_bastion_host.hub_bastion.id
 }
 
 output "bastion_name" {

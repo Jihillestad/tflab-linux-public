@@ -121,7 +121,7 @@ resource "azurerm_linux_virtual_machine" "test_vm1" {
 # Attach Data Disk to VM
 resource "azurerm_virtual_machine_data_disk_attachment" "example_disk_attachment" {
   managed_disk_id    = azurerm_managed_disk.webapp_data_disk.id
-  virtual_machine_id = azurerm_linux_virtual_machine.ubuntu_vm1.id
+  virtual_machine_id = azurerm_linux_virtual_machine.test_vm1.id
   lun                = 0
   caching            = "None"
 }
