@@ -103,10 +103,10 @@ resource "azurerm_application_gateway" "appgw" {
     port = 80
   }
 
-  frontend_port {
-    name = "https-frontend-port"
-    port = 443
-  }
+  # frontend_port {
+  #   name = "https-frontend-port"
+  #   port = 443
+  # }
 
   frontend_ip_configuration {
     name                 = "appgw-frontend-ip"

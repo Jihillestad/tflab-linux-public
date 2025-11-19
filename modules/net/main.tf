@@ -51,7 +51,7 @@ resource "azurerm_subnet_network_security_group_association" "nsg_associations" 
   for_each = local.subnets_with_nsg
 
   subnet_id                 = azurerm_subnet.this[each.key].id
-  network_security_group_id = azurerm_network_security_group.nsg1.id # When more nsg's are needed, add the correct nsg as a key in the local.subnet_config
+  network_security_group_id = azurerm_network_security_group.nsg1.id // When more nsg's are needed, add the correct nsg as a key in the local.subnet_config
 }
 
 #Build the VNet and subnets

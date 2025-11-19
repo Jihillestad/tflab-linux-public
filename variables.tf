@@ -2,12 +2,17 @@ variable "prefix" {
   description = "Prefix for resource names"
   type        = string
   default     = "jih"
+  validation {
+    condition     = length(var.prefix) <= 10
+    error_message = "Prefix must be 10 characters or less to fit storage account naming (24 char limit)."
+  }
 }
 
 variable "location" {
   description = "The Azure region where resources will be deployed"
   type        = string
   default     = "norwayeast"
+
   validation {
     condition     = contains(["norwayeast", "norwaywest", "westeurope", "northeurope"], var.location)
     error_message = "The location must be one of: norwayeast, norwaywest, westeurope, northeurope."
@@ -27,6 +32,11 @@ variable "size" {
 
 variable "project_name" {
   type = string
+
+  validation {
+    condition     = length(var.project_name) <= 8
+    error_message = "Project name must be 8 characters or less to fit storage account naming."
+  }
 }
 
 variable "environment" {

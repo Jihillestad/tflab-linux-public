@@ -2,6 +2,15 @@
 # The network interface is configured with a private IP only (no public IP)
 # and is associated with Application Gateway backend pool for secure ingress.
 
+# Loval variables for storage account name construction and overflow safety
+locals {
+  # Calculate components separately for clarity
+  storage_prefix = lower("${var.prefix}${var.project_name}btsa")
+  storage_suffix = random_string.main.result
+
+  # Total length will be prefix + suffix
+  storage_name_length = length(local.storage_prefix) + length(local.storage_suffix)
+}
 
 # Random string for unique naming
 resource "random_string" "main" {
@@ -15,7 +24,7 @@ resource "random_string" "main" {
 
 # Storage Account for Boot Diagnostics
 resource "azurerm_storage_account" "boot_diagnostics_sa" {
-  name                = substr(lower("${var.prefix}${var.project_name}btsa${random_string.main.result}"), 0, 24) # Storage account names must be globally unique and between 3-24 characters. Overflow handled by substr function.
+  name                = "${local.storage_prefix}${local.storage_suffix}"
   resource_group_name = var.resource_group_name
   location            = var.location
 
@@ -23,6 +32,14 @@ resource "azurerm_storage_account" "boot_diagnostics_sa" {
   account_kind               = var.sa_account_kind
   account_replication_type   = var.sa_account_replication_type
   https_traffic_only_enabled = true
+
+  # Overflow protection for storage account name length
+  lifecycle {
+    precondition {
+      condition     = local.storage_name_length <= 24
+      error_message = "Storage account name would exceed 24 characters: ${local.storage_name_length}"
+    }
+  }
 }
 
 

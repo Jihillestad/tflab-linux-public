@@ -15,11 +15,21 @@ variable "location" {
 variable "prefix" {
   description = "Prefix for resource names"
   type        = string
+
+  validation {
+    condition     = length(var.prefix) <= 10
+    error_message = "Prefix must be 10 characters or less to fit storage account naming (24 char limit)."
+  }
 }
 
 variable "project_name" {
   type        = string
   description = "The name of the project"
+
+  validation {
+    condition     = length(var.project_name) <= 8
+    error_message = "Project name must be 8 characters or less to fit storage account naming."
+  }
 }
 
 variable "username" {
