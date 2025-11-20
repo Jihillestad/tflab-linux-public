@@ -40,6 +40,8 @@ resource "azurerm_storage_account" "boot_diagnostics_sa" {
       error_message = "Storage account name would exceed 24 characters: ${local.storage_name_length}"
     }
   }
+
+  tags = var.tags
 }
 
 

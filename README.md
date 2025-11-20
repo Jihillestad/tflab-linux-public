@@ -37,6 +37,12 @@ This project implements a **hub-and-spoke network topology** with the following 
 
 ## Resource Details
 
+### Azure Policies (`./governance.tf`)
+
+- Built-in policies assigned at Resource Group level:
+  - Allowed locations
+  - Enforce tag
+
 ### Networking (`modules/net/`)
 
 - Hub VNet with subnets:
@@ -80,7 +86,7 @@ Shared infrastructure services deployed once in the hub:
     - IP from Default Subnet
   - SSH Key Authentication
 
-### IAM & Security
+### IAM & Security (`modules/kv/` and `./iam.tf`)
 
 **Security warning: The SSH key pair is stored in plain text in Terraform State. Use for lab only.**
 

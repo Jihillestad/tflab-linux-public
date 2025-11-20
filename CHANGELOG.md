@@ -1,5 +1,18 @@
 # Change Log
 
+## Verison 2.4.0 - Minor release
+
+### Features
+
+- Added **./governance.tf** to implement the following Azure Policies:
+  - Allowed Locations: `norwayeast`, `norwaywest`
+  - Require Tagging: `Environment`
+- Adsded explicit dependencies to policy assignments to ensure proper creation order.
+
+### Documentation
+
+- Updated docs to reflect new governance features.
+
 ## Verssion 2.3.7 - Patch release
 
 ### Features
