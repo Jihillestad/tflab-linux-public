@@ -17,6 +17,11 @@ module "kv" {
   soft_delete_retention_days = 7
 
   tags = local.common_tags
+
+  depends_on = [
+    azurerm_resource_group_policy_assignment.allowed_locations,
+    azurerm_resource_group_policy_assignment.require_environment_tag,
+  ]
 }
 
 

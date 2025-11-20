@@ -56,6 +56,11 @@ module "hub_network" {
   vnet_config         = local.hub_vnet
 
   tags = local.common_tags
+
+  depends_on = [
+    azurerm_resource_group_policy_assignment.allowed_locations,
+    azurerm_resource_group_policy_assignment.require_environment_tag,
+  ]
 }
 
 # Hub Services (Bastion, NAT Gateway, App Gateway)
@@ -76,6 +81,11 @@ module "hub_services" {
   }
 
   tags = local.common_tags
+
+  depends_on = [
+    azurerm_resource_group_policy_assignment.allowed_locations,
+    azurerm_resource_group_policy_assignment.require_environment_tag,
+  ]
 }
 
 
@@ -94,6 +104,11 @@ module "vm" {
   appgw_backend_pool_id = module.hub_services.appgw_backend_pool_id
 
   tags = local.common_tags
+
+  depends_on = [
+    azurerm_resource_group_policy_assignment.allowed_locations,
+    azurerm_resource_group_policy_assignment.require_environment_tag,
+  ]
 }
 
 
@@ -108,4 +123,9 @@ module "mon" {
   vnet_id             = module.hub_network.vnet_id
 
   tags = local.common_tags
+
+  depends_on = [
+    azurerm_resource_group_policy_assignment.allowed_locations,
+    azurerm_resource_group_policy_assignment.require_environment_tag,
+  ]
 }

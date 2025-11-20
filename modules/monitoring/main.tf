@@ -58,6 +58,8 @@ resource "azurerm_storage_account" "nw_sa" {
       error_message = "Storage account name would exceed 24 characters: ${local.storage_name_length}"
     }
   }
+
+  tags = var.tags
 }
 
 # Enable Network Watcher Flow Logs with Traffic Analytics
