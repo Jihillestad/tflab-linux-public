@@ -105,7 +105,7 @@ module "vm" {
   prefix                = var.prefix
   project_name          = var.project_name
   environment           = var.environment
-  subnet_id             = module.hub_network.subnet_id
+  subnet_id             = module.hub_network.subnet_ids["default"]
   ssh_public_key        = azurerm_key_vault_secret.ssh_public_key.value // Fetch the public key from Key Vault
   appgw_backend_pool_id = module.hub_services.appgw_backend_pool_id
 
