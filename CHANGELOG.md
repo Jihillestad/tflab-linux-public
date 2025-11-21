@@ -1,5 +1,29 @@
 # Change Log
 
+## Version 3.0.0 - Major release
+
+### Refactoring
+
+- **Breaking Change:** Removed `modules/monitoring/` (not reusable)
+- **Breaking Change**: Removed deprecated outputs from "./modules/net/outputs.tf":
+  - subnet_id
+  - subnet_name
+- Moved Log Analytics Workspace to `modules/hubserv/`
+- Moved Network Watcher monitoring to root level (`nwmon.tf`)
+- Added comprehensive Application Gateway monitoring and alerting
+
+### Features
+
+- Application Gateway diagnostic settings (access, performance, WAF logs)
+- 4 critical Application Gateway metric alerts
+- Email notification action group
+- Centralized hub monitoring architecture
+
+### Documentation
+
+- Updated architecture documentation
+- Added monitoring configuration guide
+
 ## Version 2.4.0 - Minor release
 
 ### Features
