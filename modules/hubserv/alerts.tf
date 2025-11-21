@@ -164,3 +164,21 @@ resource "azurerm_monitor_metric_alert" "appgw_5xx_errors" {
 
   tags = var.tags
 }
+
+# ------------------------------------------------------------
+# BASTION HOST
+# ------------------------------------------------------------
+
+resource "azurerm_monitor_diagnostic_setting" "bastion_diagnostics" {
+  name                       = "${var.hub_vnet_name}-bastion-diagnostics"
+  target_resource_id         = azurerm_bastion_host.hub_bastion.id
+  log_analytics_workspace_id = azurerm_log_analytics_workspace.law.id
+
+  enabled_log {
+    category = "BastionAuditLogs" // Who accessed what
+  }
+
+  enabled_metric {
+    category = "AllMetrics"
+  }
+}
