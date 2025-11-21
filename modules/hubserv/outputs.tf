@@ -50,3 +50,24 @@ output "appgw_backend_pool_id" {
   description = "The ID of the Application Gateway backend pool"
   value       = tolist(azurerm_application_gateway.appgw.backend_address_pool)[0].id
 }
+
+output "log_analytics_workspace_id" {
+  description = "The workspace ID of the Log Analytics Workspace"
+  value       = azurerm_log_analytics_workspace.law.workspace_id
+}
+
+output "log_analytics_workspace_name" {
+  description = "The name of the Log Analytics Workspace"
+  value       = azurerm_log_analytics_workspace.law.name
+}
+
+output "log_analytics_workspace_resource_id" {
+  description = "The resource ID of the Log Analytics Workspace"
+  value       = azurerm_log_analytics_workspace.law.id
+}
+
+output "log_analytics_workspace_location" {
+  description = "The location of the Log Analytics Workspace"
+  value       = azurerm_log_analytics_workspace.law.location
+}
+

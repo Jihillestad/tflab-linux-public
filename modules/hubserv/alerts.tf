@@ -11,7 +11,7 @@
 resource "azurerm_monitor_diagnostic_setting" "appgw_diagnostics" {
   name                       = "${var.hub_vnet_name}-appgw-diagnostics"
   target_resource_id         = azurerm_application_gateway.appgw.id
-  log_analytics_workspace_id = var.log_analytics_workspace_id
+  log_analytics_workspace_id = azurerm_log_analytics_workspace.law.id
 
   # Application Gateway Logs
   enabled_log {
