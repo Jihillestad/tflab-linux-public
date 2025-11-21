@@ -25,6 +25,11 @@ variable "username" {
   default     = "adminuser"
 }
 
+variable "admin_email" {
+  description = "Email address of the administrator for notifications"
+  type        = string
+}
+
 variable "size" {
   type    = string
   default = "Standard_DS1_v2"
@@ -68,4 +73,40 @@ variable "env_version" {
     condition     = can(regex("^v[0-9]+\\.[0-9]+\\.[0-9]+$", var.env_version))
     error_message = "The environment version must follow semantic versioning (e.g., v1.0.0)."
   }
+}
+
+variable "sa_account_tier" {
+  description = "The Tier of the Storage Account (Standard or Premium)"
+  type        = string
+  default     = "Standard"
+  validation {
+    condition     = contains(["Standard", "Premium"], var.sa_account_tier)
+    error_message = "The account tier must be either Standard or Premium."
+  }
+}
+
+variable "sa_account_kind" {
+  description = "The Kind of the Storage Account (StorageV2, BlobStorage, FileStorage, BlockBlobStorage)"
+  type        = string
+  default     = "StorageV2"
+  validation {
+    condition     = contains(["StorageV2", "BlobStorage", "FileStorage", "BlockBlobStorage"], var.sa_account_kind)
+    error_message = "The account kind must be one of: StorageV2, BlobStorage, FileStorage, BlockBlobStorage."
+  }
+}
+
+variable "sa_account_replication_type" {
+  description = "The Replication type of the Storage Account (LRS, GRS, RAGRS, ZRS, GZRS, RAGZRS)"
+  type        = string
+  default     = "LRS"
+  validation {
+    condition     = contains(["LRS", "GRS", "RAGRS", "ZRS", "GZRS", "RAGZRS"], var.sa_account_replication_type)
+    error_message = "The account replication type must be one of: LRS, GRS, RAGRS, ZRS, GZRS, RAGZRS."
+  }
+}
+
+variable "vnet_flow_log_retention_days" {
+  description = "Number of days to retain flow logs"
+  type        = number
+  default     = 7
 }

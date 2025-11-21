@@ -42,13 +42,15 @@ locals {
   }
 }
 
-
 module "hub_services" {
   source = "./modules/hubserv/"
 
   resource_group_name = azurerm_resource_group.tflab_linux.name
   location            = azurerm_resource_group.tflab_linux.location
   hub_vnet_name       = local.hub_vnet.name
+  prefix              = var.prefix
+  project_name        = var.project_name
+  environment         = var.environment
 
   # Subnet references from hub network module
   bastion_subnet_id = module.hub_network.subnet_ids["bastion_subnet"]
@@ -59,17 +61,29 @@ module "hub_services" {
     default = module.hub_network.subnet_ids["default"]
   }
 
-  tags = local.common_tags
-}
+  # Monitoring configuration
+  admin_email = var.admin_email
 
+  tags = local.common_tags
+
+  depends_on = [
+    azurerm_resource_group_policy_assignment.allowed_locations,
+    azurerm_resource_group_policy_assignment.require_environment_tag,
+  ]
+}
 
 module "hub_network" {
   source              = "./modules/net/"
   resource_group_name = azurerm_resource_group.tflab_linux.name
   location            = azurerm_resource_group.tflab_linux.location
-  vnet_config = local.hub_vnet
+  vnet_config         = local.hub_vnet
 
   tags = local.common_tags
+
+  depends_on = [
+    azurerm_resource_group_policy_assignment.allowed_locations,
+    azurerm_resource_group_policy_assignment.require_environment_tag,
+  ]
 }
 ```
 
@@ -91,27 +105,35 @@ module "hub_network" {
 
 ## Inputs
 
-| Name                | Description                                                                          | Type          | Default | Required |
-| ------------------- | ------------------------------------------------------------------------------------ | ------------- | ------- | -------- |
-| resource_group_name | (Required) The name of the resource group in which to create the resources.          | `string`      | n/a     | yes      |
-| location            | (Required) The Azure region where resources will be created.                         | `string`      | n/a     | yes      |
-| hub_vnet_name       | (Optional) The name of the Hub Virtual Network.                                      | `string`      | n/a     | yes      |
-| bastion_subnet_id   | (Optional) The ID of the subnet for Azure Bastion (must be named AzureBastionSubnet) | `string`      | n/a     | yes      |
-| appgw_subnet_id     | (Optional) The ID of the subnet for Application Gateway                              | `string`      | n/a     | yes      |
-| nat_gateay_subnets  | (Optional) Map of subnet keys to subnet IDs for NAT Gateway association              | `map(string)` | n/a     | no       |
-| tags                | (Optional) A mapping of tags to assign to the resource.                              | `map(string)` | `{}`    | no       |
+| Name                | Description                                                                          | Type          | Default  | Required |
+| ------------------- | ------------------------------------------------------------------------------------ | ------------- | -------- | -------- |
+| resource_group_name | (Required) The name of the resource group in which to create the resources.          | `string`      | n/a      | yes      |
+| location            | (Required) The Azure region where resources will be created.                         | `string`      | n/a      | yes      |
+| hub_vnet_name       | (Optional) The name of the Hub Virtual Network.                                      | `string`      | n/a      | yes      |
+| prefix              | (Optional) Prefix for resouce names.                                                 | `string`      | n/a      | no       |
+| project_name        | (Optional) The name of the project.                                                  | `string`      | `"demo"` | no       |
+| environment         | (Optional) Environment name for naming resources.                                    | `string`      | `"dev"`  | no       |
+| bastion_subnet_id   | (Optional) The ID of the subnet for Azure Bastion (must be named AzureBastionSubnet) | `string`      | n/a      | yes      |
+| appgw_subnet_id     | (Optional) The ID of the subnet for Application Gateway                              | `string`      | n/a      | yes      |
+| nat_gateay_subnets  | (Optional) Map of subnet keys to subnet IDs for NAT Gateway association              | `map(string)` | n/a      | no       |
+| admin_email         | (Optional) Email address of the administrator for notifications.                     | `string`      | `""`     | no       |
+| tags                | (Optional) A mapping of tags to assign to the resource.                              | `map(string)` | `{}`     | no       |
 
 ## Outputs
 
-| Name                  | Description                                     |
-| --------------------- | ----------------------------------------------- |
-| bastion_host_id       | The ID of the Azure Bastion Host.               |
-| bastion_host_name     | The name of the Azure Bastion Host.             |
-| bastion_public_ip     | The public IP of the Azure Bastion Host.        |
-| nat_gateway_id        | The ID of the NAT Gateway.                      |
-| nat_gateway_public_ip | The public IP of the NAT Gateway.               |
-| appgw_id              | The ID of the Application Gateway.              |
-| appgw_name            | The name of the Application Gateway.            |
-| appgw_public_ip       | The public IP of the Application Gateway.       |
-| appgw_backend_pool_id | The ID of the Application Gateway backend pool. |
-| appgw_subnet_id       | The ID of the Application Gateway subnet.       |
+| Name                                | Description                                     |
+| ----------------------------------- | ----------------------------------------------- |
+| bastion_host_id                     | The ID of the Azure Bastion Host.               |
+| bastion_host_name                   | The name of the Azure Bastion Host.             |
+| bastion_public_ip                   | The public IP of the Azure Bastion Host.        |
+| nat_gateway_id                      | The ID of the NAT Gateway.                      |
+| nat_gateway_public_ip               | The public IP of the NAT Gateway.               |
+| appgw_id                            | The ID of the Application Gateway.              |
+| appgw_name                          | The name of the Application Gateway.            |
+| appgw_public_ip                     | The public IP of the Application Gateway.       |
+| appgw_backend_pool_id               | The ID of the Application Gateway backend pool. |
+| appgw_subnet_id                     | The ID of the Application Gateway subnet.       |
+| log_analytics_workspace_id          | The workspace ID of the Log Analytics Workspace |
+| log_analytics_workspace_name        | The name of the Log Analytics Workspace         |
+| log_analytics_workspace_resource_id | The resource ID of the Log Analytics Workspace  |
+| log_analytics_workspace_location    | The location of the Log Analytics Workspace     |

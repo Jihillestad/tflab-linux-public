@@ -161,3 +161,19 @@ resource "azurerm_application_gateway" "appgw" {
 
   tags = var.tags
 }
+
+
+# ------------------------------------------------------------------------------
+# LOG ANALYTICS WORKSPACE
+# ------------------------------------------------------------------------------
+
+# Create a Log Analytics Workspace for monitoring
+resource "azurerm_log_analytics_workspace" "law" {
+  name                = "${var.prefix}-${var.project_name}-law-${var.environment}"
+  location            = var.location
+  resource_group_name = var.resource_group_name
+  sku                 = "PerGB2018"
+  retention_in_days   = 30
+
+  tags = var.tags
+}

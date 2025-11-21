@@ -77,11 +77,9 @@ module "hub_network" {
 
 ## Outputs
 
-| Name                    | Description                           |
-| ----------------------- | ------------------------------------- |
-| vnet_id                 | The ID of the Virtual Network.        |
-| subnet_id(deprecated)   | The ID of the default Subnet.         |
-| subnet_ids              | The IDs of the default Subnets.       |
-| subnet_name(deprecated) | The name of the default Subnet.       |
-| subnet_names            | The names of the default Subnets.     |
-| nsg_id                  | The ID of the Network Security Group. |
+| Name         | Description                           |
+| ------------ | ------------------------------------- |
+| vnet_id      | The ID of the Virtual Network.        |
+| subnet_ids   | The IDs of the default Subnets.       |
+| subnet_names | The names of the default Subnets.     |
+| nsg_id       | The ID of the Network Security Group. |

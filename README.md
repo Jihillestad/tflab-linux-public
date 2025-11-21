@@ -32,8 +32,8 @@ This project implements a **hub-and-spoke network topology** with the following 
 
 - **`modules/net/`** - Generic VNet module (reusable for hub and spokes)
 - **`modules/hubserv/`** - Hub services (Bastion, NAT Gateway, App Gateway)
-- **`modules/monitoring/`** - Observability (Log Analytics, Network Watcher)
 - **`modules/compute/`** - Virtual machine resources. For test only in hub, move to spoke in production.
+- **`modules/kv/`** - Key Vault module for secrets management
 
 ## Resource Details
 
@@ -68,10 +68,12 @@ Shared infrastructure services deployed once in the hub:
   - Public IP
   - Shared outbound internet connectivity
   - Associated with Default Subnet
-
-### Monitoring (`modules/monitoring/`)
-
 - Log Analytics Workspace (30-day retention)
+- Monitoring Alerts (email notifications):
+  - Application Gateway health
+
+### Monitoring (`./nwmon.tf`)
+
 - Network Watcher (Azure built-in)
   - VNet flow logs with Traffic Analytics
   - Storage Account for flow logs

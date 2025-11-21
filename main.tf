@@ -70,6 +70,9 @@ module "hub_services" {
   resource_group_name = azurerm_resource_group.tflab_linux.name
   location            = azurerm_resource_group.tflab_linux.location
   hub_vnet_name       = local.hub_vnet.name
+  prefix              = var.prefix
+  project_name        = var.project_name
+  environment         = var.environment
 
   # Subnet references from hub network module
   bastion_subnet_id = module.hub_network.subnet_ids["bastion_subnet"]
@@ -79,6 +82,9 @@ module "hub_services" {
   nat_gateway_subnets = {
     default = module.hub_network.subnet_ids["default"]
   }
+
+  # Monitoring configuration
+  admin_email = var.admin_email
 
   tags = local.common_tags
 
@@ -102,25 +108,6 @@ module "vm" {
   subnet_id             = module.hub_network.subnet_id
   ssh_public_key        = azurerm_key_vault_secret.ssh_public_key.value // Fetch the public key from Key Vault
   appgw_backend_pool_id = module.hub_services.appgw_backend_pool_id
-
-  tags = local.common_tags
-
-  depends_on = [
-    azurerm_resource_group_policy_assignment.allowed_locations,
-    azurerm_resource_group_policy_assignment.require_environment_tag,
-  ]
-}
-
-
-# Configure monitoring with Log Analytics and Network Watcher
-module "mon" {
-  source              = "./modules/monitoring/"
-  resource_group_name = azurerm_resource_group.tflab_linux.name
-  location            = azurerm_resource_group.tflab_linux.location
-  prefix              = var.prefix
-  project_name        = var.project_name
-  environment         = var.environment
-  vnet_id             = module.hub_network.vnet_id
 
   tags = local.common_tags
 
