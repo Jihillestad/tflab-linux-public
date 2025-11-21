@@ -7,14 +7,15 @@
 
 # Create an Azure Key Vault 
 module "kv" {
-  source                     = "./modules/kv/"
-  resource_group_name        = azurerm_resource_group.tflab_linux.name
-  location                   = azurerm_resource_group.tflab_linux.location
-  prefix                     = var.prefix
-  project_name               = var.project_name
-  environment                = var.environment
-  purge_protection_enabled   = false
-  soft_delete_retention_days = 7
+  source                              = "./modules/kv/"
+  resource_group_name                 = azurerm_resource_group.tflab_linux.name
+  location                            = azurerm_resource_group.tflab_linux.location
+  prefix                              = var.prefix
+  project_name                        = var.project_name
+  environment                         = var.environment
+  purge_protection_enabled            = false
+  soft_delete_retention_days          = 7
+  log_analytics_workspace_resource_id = module.hub_services.log_analytics_workspace_resource_id
 
   tags = local.common_tags
 

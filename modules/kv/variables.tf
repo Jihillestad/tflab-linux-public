@@ -41,6 +41,11 @@ variable "environment" {
   }
 }
 
+variable "log_analytics_workspace_resource_id" {
+  description = "The resource ID of the Log Analytics Workspace for diagnostics"
+  type        = string
+}
+
 variable "purge_protection_enabled" {
   description = "Enable purge protection for the Key Vault"
   type        = bool
