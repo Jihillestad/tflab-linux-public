@@ -305,7 +305,7 @@ resource "azurerm_monitor_metric_alert" "bastion_high_sessions" {
   }
 
   action {
-    action_group_id = azurerm_monitor_action_group.appgw_alerts.id
+    action_group_id = azurerm_monitor_action_group.bastion_alerts.id
   }
 
   frequency   = "PT5M"

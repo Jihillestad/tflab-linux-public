@@ -18,7 +18,7 @@ resource "azurerm_monitor_diagnostic_setting" "kv_diagnostics" {
 
 # Action Group for Application Gateway Alerts
 resource "azurerm_monitor_action_group" "kv_alerts" {
-  name                = "${var.prefix}-${var.project_name}-appgw-action-group-${var.environment}"
+  name                = "${var.prefix}-${var.project_name}-kv-action-group-${var.environment}"
   resource_group_name = var.resource_group_name
   short_name          = "kvalerts"
 
