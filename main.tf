@@ -80,6 +80,10 @@ module "hub_services" {
     default = module.hub_network.subnet_ids["default"]
   }
 
+  # Monitoring configuration
+  log_analytics_workspace_id = module.mon.log_analytics_workspace_resource_id
+  admin_email                = var.admin_email
+
   tags = local.common_tags
 
   depends_on = [

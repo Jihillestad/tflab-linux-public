@@ -28,6 +28,17 @@ variable "nat_gateway_subnets" {
   description = "Map of subnet keys to subnet IDs for NAT Gateway association"
   default     = {}
 }
+
+variable "log_analytics_workspace_id" {
+  description = "Log Analytics Workspace ID for diagnostics"
+  type        = string
+}
+
+variable "admin_email" {
+  description = "Email address of the administrator for notifications"
+  type        = string
+}
+
 variable "tags" {
   description = "A map of tags to add to all resources"
   type        = map(string)

@@ -25,6 +25,11 @@ variable "username" {
   default     = "adminuser"
 }
 
+variable "admin_email" {
+  description = "Email address of the administrator for notifications"
+  type        = string
+}
+
 variable "size" {
   type    = string
   default = "Standard_DS1_v2"
