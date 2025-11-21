@@ -1,5 +1,13 @@
 # Change Log
 
+## Version 3.1.2 - Patch release
+
+### Bug Fixes
+
+- Fixed typo in Bastion Alert Action Group.
+- Fixed Key Vault Action Group name.
+- Fixed typo in changelog.
+
 ## Version 3.1.1 - Patch release
 
 ### Features
@@ -8,7 +16,7 @@
 
 ### Bug Fixed
 
-- Fixed ionconsistent naming in general. Changed to CAF friendly names.
+- Fixed inconsistent naming in general. Changed to CAF friendly names.
 
 ## Version 3.1.0 - Minor release
 
