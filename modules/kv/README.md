@@ -38,21 +38,32 @@ module "kv" {
 
 ## Resources Created
 
+### main.tf
+
 - azurerm_key_vault
 - azurerm_key_vault_access_policy
 
+### alerts.tf
+
+- Azure Monitor diagnostic settings for Key Vault
+- Azure Monitor Action Group for email notifications
+- Azure Monitor Metric Alerts:
+  - KV Availability
+
 ## Inputs
 
-| Name                       | Description                                                                 | Type          | Default | Required |
-| -------------------------- | --------------------------------------------------------------------------- | ------------- | ------- | -------- |
-| resource_group_name        | (Required) The name of the resource group in which to create the resources. | `string`      | n/a     | yes      |
-| location                   | (Required) The Azure region where resources will be created.                | `string`      | n/a     | yes      |
-| prefix                     | (Required) Prefix for resource names.                                       | `string`      | n/a     | yes      |
-| project_name               | (Required) Project name for resource names.                                 | `string`      | n/a     | yes      |
-| environment                | (Required) Environment name for resource names.                             | `string`      | n/a     | yes      |
-| purge_protection_enabled   | (Optional) Enable purge protection for the Key Vault.                       | `bool`        | `false` | no       |
-| soft_delete_retention_days | (Optional) Number of days to retain deleted Key Vaults.                     | `number`      | `7`     | no       |
-| tags                       | (Optional) A mapping of tags to assign to the resource.                     | `map(string)` | `{}`    | no       |
+| Name                                | Description                                                                 | Type          | Default | Required |
+| ----------------------------------- | --------------------------------------------------------------------------- | ------------- | ------- | -------- |
+| resource_group_name                 | (Required) The name of the resource group in which to create the resources. | `string`      | n/a     | yes      |
+| location                            | (Required) The Azure region where resources will be created.                | `string`      | n/a     | yes      |
+| prefix                              | (Required) Prefix for resource names.                                       | `string`      | n/a     | yes      |
+| project_name                        | (Required) Project name for resource names.                                 | `string`      | n/a     | yes      |
+| environment                         | (Required) Environment name for resource names.                             | `string`      | n/a     | yes      |
+| log_analytics_workspace_resource_id | (Optional) The resource ID of the Log Analytics Workspace for diagnostics.  | `string`      | `""`    | no       |
+| admin_email                         | (Optional) Email address of the administrator for notifications.            | `string`      | `""`    | no       |
+| purge_protection_enabled            | (Optional) Enable purge protection for the Key Vault.                       | `bool`        | `false` | no       |
+| soft_delete_retention_days          | (Optional) Number of days to retain deleted Key Vaults.                     | `number`      | `7`     | no       |
+| tags                                | (Optional) A mapping of tags to assign to the resource.                     | `map(string)` | `{}`    | no       |
 
 ## Outputs
 

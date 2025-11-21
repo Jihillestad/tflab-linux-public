@@ -46,6 +46,11 @@ variable "log_analytics_workspace_resource_id" {
   type        = string
 }
 
+variable "admin_email" {
+  description = "Email address of the administrator for notifications"
+  type        = string
+}
+
 variable "purge_protection_enabled" {
   description = "Enable purge protection for the Key Vault"
   type        = bool

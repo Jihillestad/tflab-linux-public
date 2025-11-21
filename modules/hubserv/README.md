@@ -110,12 +110,23 @@ module "hub_network" {
   - Bastion Host
   - Application Gateway
   - NAT Gateway
-- Azure Monitor Action Group for Application Gateway alerts
+- Azure Monitor Action Groups:
+  - Application Gateway alerts
+  - NAT Gateway alerts
+  - Bastion Host alerts
 - Azure Monitor Metric Alerts for Application Gateway
   - Unhealthy Host Alert
   - 5xx Error Alert
+  - 4xx Error Alert
   - Failed Request Alert
   - Backend Response Time Alert
+  - Compute Unit Alert
+  - Capacity Unit Alert
+- Azure Monitor Metric Alerts for NAT Gateway
+  - SNAT Port Exhaustion Alert
+  - NAT Dropped Packets Alert
+- Azure Monitor Log Alerts for Bastion Host
+  - Bastion Connection Failures Alert
 
 ## Inputs
 

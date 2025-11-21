@@ -9,7 +9,7 @@
 
 # Diagnostic Settings for Application Gateway
 resource "azurerm_monitor_diagnostic_setting" "appgw_diagnostics" {
-  name                       = "${var.hub_vnet_name}-appgw-diagnostics"
+  name                       = "${var.prefix}-${var.project_name}-appgw-diagnostics-${var.environment}"
   target_resource_id         = azurerm_application_gateway.appgw.id
   log_analytics_workspace_id = azurerm_log_analytics_workspace.law.id
 
@@ -32,9 +32,9 @@ resource "azurerm_monitor_diagnostic_setting" "appgw_diagnostics" {
   }
 }
 
-# Action Group for Alerts
+# Action Group for Application Gateway Alerts
 resource "azurerm_monitor_action_group" "appgw_alerts" {
-  name                = "${var.hub_vnet_name}-appgw-action-group"
+  name                = "${var.prefix}-${var.project_name}-appgw-action-group-${var.environment}"
   resource_group_name = var.resource_group_name
   short_name          = "appgwalert"
 
@@ -55,7 +55,7 @@ resource "azurerm_monitor_action_group" "appgw_alerts" {
 
 # Alert for unhealthy backends
 resource "azurerm_monitor_metric_alert" "appgw_unhealthy_host" {
-  name                = "${var.hub_vnet_name}-appgw-unhealthy-host-alert"
+  name                = "${var.prefix}-${var.project_name}-appgw-unhealthy-host-alert-${var.environment}"
   resource_group_name = var.resource_group_name
   scopes              = [azurerm_application_gateway.appgw.id]
   description         = "Alert when Application Gateway has unhealthy backend hosts"
@@ -82,7 +82,7 @@ resource "azurerm_monitor_metric_alert" "appgw_unhealthy_host" {
 
 # Alert for failed requests
 resource "azurerm_monitor_metric_alert" "appgw_failed_requests" {
-  name                = "${var.hub_vnet_name}-appgw-failed-requests-alert"
+  name                = "${var.prefix}-${var.project_name}-appgw-failed-requests-alert-${var.environment}"
   resource_group_name = var.resource_group_name
   scopes              = [azurerm_application_gateway.appgw.id]
   description         = "Alert when Application Gateway has high failed request rate"
@@ -109,7 +109,7 @@ resource "azurerm_monitor_metric_alert" "appgw_failed_requests" {
 
 # Alert for backend response time
 resource "azurerm_monitor_metric_alert" "appgw_backend_response_time" {
-  name                = "${var.hub_vnet_name}-appgw-response-time-alert"
+  name                = "${var.prefix}-${var.project_name}-appgw-response-time-alert-${var.environment}"
   resource_group_name = var.resource_group_name
   scopes              = [azurerm_application_gateway.appgw.id]
   description         = "Alert when backend response time is too high"
@@ -135,7 +135,7 @@ resource "azurerm_monitor_metric_alert" "appgw_backend_response_time" {
 
 # Alert for high 5xx errors
 resource "azurerm_monitor_metric_alert" "appgw_5xx_errors" {
-  name                = "${var.hub_vnet_name}-appgw-5xx-errors-alert"
+  name                = "${var.prefix}-${var.project_name}-appgw-5xx-errors-alert-${var.environment}"
   resource_group_name = var.resource_group_name
   scopes              = [azurerm_application_gateway.appgw.id]
   description         = "Alert when Application Gateway returns high 5xx errors"
@@ -165,12 +165,96 @@ resource "azurerm_monitor_metric_alert" "appgw_5xx_errors" {
   tags = var.tags
 }
 
+# Alert for 4xx errors (client errors)
+resource "azurerm_monitor_metric_alert" "appgw_4xx_errors" {
+  name                = "${var.prefix}-${var.project_name}-appgw-4xx-errors-alert-${var.environment}"
+  resource_group_name = var.resource_group_name
+  scopes              = [azurerm_application_gateway.appgw.id]
+  description         = "Alert when Application Gateway returns high 4xx errors"
+  severity            = 2 # Warning
+
+  criteria {
+    metric_namespace = "Microsoft.Network/applicationGateways"
+    metric_name      = "ResponseStatus"
+    aggregation      = "Total"
+    operator         = "GreaterThan"
+    threshold        = 100
+
+    dimension {
+      name     = "HttpStatusGroup"
+      operator = "Include"
+      values   = ["4xx"]
+    }
+  }
+
+  action {
+    action_group_id = azurerm_monitor_action_group.appgw_alerts.id
+  }
+
+  frequency   = "PT5M"
+  window_size = "PT15M"
+
+  tags = var.tags
+}
+
+# Alert for compute unit usage (capacity planning)
+resource "azurerm_monitor_metric_alert" "appgw_compute_units" {
+  name                = "${var.prefix}-${var.project_name}-appgw-compute-units-alert-${var.environment}"
+  resource_group_name = var.resource_group_name
+  scopes              = [azurerm_application_gateway.appgw.id]
+  description         = "Alert when Application Gateway compute units are high"
+  severity            = 2 # Warning
+
+  criteria {
+    metric_namespace = "Microsoft.Network/applicationGateways"
+    metric_name      = "ComputeUnits"
+    aggregation      = "Average"
+    operator         = "GreaterThan"
+    threshold        = 8 # Out of 10 max for WAF_v2
+  }
+
+  action {
+    action_group_id = azurerm_monitor_action_group.appgw_alerts.id
+  }
+
+  frequency   = "PT5M"
+  window_size = "PT15M"
+
+  tags = var.tags
+}
+
+# Alert for capacity units (billing metric)
+resource "azurerm_monitor_metric_alert" "appgw_capacity_units" {
+  name                = "${var.prefix}-${var.project_name}-appgw-capacity-units-alert-${var.environment}"
+  resource_group_name = var.resource_group_name
+  scopes              = [azurerm_application_gateway.appgw.id]
+  description         = "Alert when Application Gateway capacity units are high (cost)"
+  severity            = 3 # Informational
+
+  criteria {
+    metric_namespace = "Microsoft.Network/applicationGateways"
+    metric_name      = "CapacityUnits"
+    aggregation      = "Average"
+    operator         = "GreaterThan"
+    threshold        = 5 # Alert before autoscaling triggers
+  }
+
+  action {
+    action_group_id = azurerm_monitor_action_group.appgw_alerts.id
+  }
+
+  frequency   = "PT15M"
+  window_size = "PT1H"
+
+  tags = var.tags
+}
+
 # ------------------------------------------------------------
 # BASTION HOST
 # ------------------------------------------------------------
 
 resource "azurerm_monitor_diagnostic_setting" "bastion_diagnostics" {
-  name                       = "${var.hub_vnet_name}-bastion-diagnostics"
+  name                       = "${var.prefix}-${var.project_name}-bastion-diagnostics-${var.environment}"
   target_resource_id         = azurerm_bastion_host.hub_bastion.id
   log_analytics_workspace_id = azurerm_log_analytics_workspace.law.id
 
@@ -183,20 +267,137 @@ resource "azurerm_monitor_diagnostic_setting" "bastion_diagnostics" {
   }
 }
 
+# Action Group for Bastion Alerts
+resource "azurerm_monitor_action_group" "bastion_alerts" {
+  name                = "${var.prefix}-${var.project_name}-bastion-action-group-${var.environment}"
+  resource_group_name = var.resource_group_name
+  short_name          = "bastionalert"
+
+  email_receiver {
+    name          = "send-to-admin"
+    email_address = var.admin_email
+  }
+
+  # Optional: Add SMS
+  # sms_receiver {
+  #   name         = "send-sms"
+  #   country_code = "47"
+  #   phone_number = "12345678"
+  # }
+
+  tags = var.tags
+}
+
+# Alert for high connection count (potential abuse)
+resource "azurerm_monitor_metric_alert" "bastion_high_sessions" {
+  name                = "${var.prefix}-${var.project_name}-bastion-high-sessions-alert-${var.environment}"
+  resource_group_name = var.resource_group_name
+  scopes              = [azurerm_bastion_host.hub_bastion.id]
+  description         = "Alert when Bastion has unusually high session count"
+  severity            = 2 # Warning
+
+  criteria {
+    metric_namespace = "Microsoft.Network/bastionHosts"
+    metric_name      = "sessions"
+    aggregation      = "Average"
+    operator         = "GreaterThan"
+    threshold        = 10 # Adjust based on your usage
+  }
+
+  action {
+    action_group_id = azurerm_monitor_action_group.appgw_alerts.id
+  }
+
+  frequency   = "PT5M"
+  window_size = "PT15M"
+
+  tags = var.tags
+}
+
 # ------------------------------------------------------------
 # NAT GATEWAY
 # ------------------------------------------------------------
 
 resource "azurerm_monitor_diagnostic_setting" "nat_gateway_diagnostics" {
-  name                       = "${var.hub_vnet_name}-nat-gateway-diagnostics"
+  name                       = "${var.prefix}-${var.project_name}-natgw-diagnostics-${var.environment}"
   target_resource_id         = azurerm_nat_gateway.nat_gateway.id
   log_analytics_workspace_id = azurerm_log_analytics_workspace.law.id
-
-  enabled_log {
-    category = "NatGatewayFlowLogs" // Track outbound flows
-  }
 
   enabled_metric {
     category = "AllMetrics"
   }
+}
+
+# Action Group for NAT Gateway Alerts
+resource "azurerm_monitor_action_group" "natgw_alerts" {
+  name                = "${var.hub_vnet_name}-natgw-action-group"
+  resource_group_name = var.resource_group_name
+  short_name          = "natgwalert"
+
+  email_receiver {
+    name          = "send-to-admin"
+    email_address = var.admin_email
+  }
+
+  # Optional: Add SMS
+  # sms_receiver {
+  #   name         = "send-sms"
+  #   country_code = "47"
+  #   phone_number = "12345678"
+  # }
+
+  tags = var.tags
+}
+
+# Alert for SNAT port exhaustion
+resource "azurerm_monitor_metric_alert" "natgw_snat_exhaustion" {
+  name                = "${var.prefix}-${var.project_name}-natgw-snat-exhaustion-alert-${var.environment}"
+  resource_group_name = var.resource_group_name
+  scopes              = [azurerm_nat_gateway.nat_gateway.id]
+  description         = "Alert when NAT Gateway is running out of SNAT ports"
+  severity            = 1 # Critical
+
+  criteria {
+    metric_namespace = "Microsoft.Network/natGateways"
+    metric_name      = "SNATConnectionCount"
+    aggregation      = "Total"
+    operator         = "GreaterThan"
+    threshold        = 50000 # 64K max, alert at 50K
+  }
+
+  action {
+    action_group_id = azurerm_monitor_action_group.natgw_alerts.id
+  }
+
+  frequency   = "PT5M"
+  window_size = "PT15M"
+
+  tags = var.tags
+}
+
+# Alert for dropped packets
+resource "azurerm_monitor_metric_alert" "natgw_dropped_packets" {
+  # name                = "${var.hub_vnet_name}-nat-dropped-packets-alert"
+  name                = "${var.prefix}-${var.project_name}-natgw-dropped-packets-alert-${var.environment}"
+  resource_group_name = var.resource_group_name
+  scopes              = [azurerm_nat_gateway.nat_gateway.id]
+  description         = "Alert when NAT Gateway is dropping packets"
+  severity            = 2 # Warning
+
+  criteria {
+    metric_namespace = "Microsoft.Network/natGateways"
+    metric_name      = "PacketDropCount"
+    aggregation      = "Total"
+    operator         = "GreaterThan"
+    threshold        = 100
+  }
+
+  action {
+    action_group_id = azurerm_monitor_action_group.natgw_alerts.id
+  }
+
+  frequency   = "PT5M"
+  window_size = "PT15M"
+
+  tags = var.tags
 }

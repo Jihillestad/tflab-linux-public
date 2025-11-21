@@ -1,5 +1,15 @@
 # Change Log
 
+## Version 3.1.1 - Patch release
+
+### Features
+
+- Added more metric alerts
+
+### Bug Fixed
+
+- Fixed ionconsistent naming in general. Changed to CAF friendly names.
+
 ## Version 3.1.0 - Minor release
 
 ### Features

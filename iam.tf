@@ -16,6 +16,7 @@ module "kv" {
   purge_protection_enabled            = false
   soft_delete_retention_days          = 7
   log_analytics_workspace_resource_id = module.hub_services.log_analytics_workspace_resource_id
+  admin_email                         = var.admin_email
 
   tags = local.common_tags
 
