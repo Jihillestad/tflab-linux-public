@@ -49,7 +49,7 @@ module "hub_services" {
   location            = azurerm_resource_group.tflab_linux.location
   hub_vnet_name       = local.hub_vnet.name
   prefix              = var.prefix
-  project_name        = var.project_name
+project_name        = var.project_name
   environment         = var.environment
 
   # Subnet references from hub network module
@@ -96,12 +96,26 @@ module "hub_network" {
 
 ## Resources Created
 
-- azurerm_network_security_group
-- azurerm_virtual_network
-- azurerm_subnet
-  - default subnet
-  - AzureBastionSubnet
-- azurerm_subnet_network_security_group_association
+### main.tf
+
+- Azure Bastion Host
+  - Public IP for Bastion Host
+- Azure Application Gateway
+- Azure NAT Gateway
+- Log Analytics Workspace
+
+### alerts.tf
+
+- Azure Monitor Diagnostic Settings for:
+  - Bastion Host
+  - Application Gateway
+  - NAT Gateway
+- Azure Monitor Action Group for Application Gateway alerts
+- Azure Monitor Metric Alerts for Application Gateway
+  - Unhealthy Host Alert
+  - 5xx Error Alert
+  - Failed Request Alert
+  - Backend Response Time Alert
 
 ## Inputs
 

@@ -1,5 +1,13 @@
 # Change Log
 
+## Version 3.1.0 - Minor release
+
+### Features
+
+- Added KV monitoring
+- Added Bastion monitoring
+- Added NAT Gateway monitoring
+
 ## Version 3.0.0 - Major release
 
 ### Refactoring

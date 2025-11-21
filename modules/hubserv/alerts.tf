@@ -182,3 +182,21 @@ resource "azurerm_monitor_diagnostic_setting" "bastion_diagnostics" {
     category = "AllMetrics"
   }
 }
+
+# ------------------------------------------------------------
+# NAT GATEWAY
+# ------------------------------------------------------------
+
+resource "azurerm_monitor_diagnostic_setting" "nat_gateway_diagnostics" {
+  name                       = "${var.hub_vnet_name}-nat-gateway-diagnostics"
+  target_resource_id         = azurerm_nat_gateway.nat_gateway.id
+  log_analytics_workspace_id = azurerm_log_analytics_workspace.law.id
+
+  enabled_log {
+    category = "NatGatewayFlowLogs" // Track outbound flows
+  }
+
+  enabled_metric {
+    category = "AllMetrics"
+  }
+}
