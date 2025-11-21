@@ -9,7 +9,7 @@
 # ------------------------------------------------------------------------------
 
 resource "azurerm_public_ip" "bastion_pip" {
-  name                = "${var.hub_vnet_name}-bastion-pip"
+  name                = "${var.prefix}-${var.project_name}-bastion-pip-${var.environment}"
   resource_group_name = var.resource_group_name
   location            = var.location
   allocation_method   = "Static"
@@ -19,7 +19,7 @@ resource "azurerm_public_ip" "bastion_pip" {
 }
 
 resource "azurerm_bastion_host" "hub_bastion" {
-  name                = "${var.hub_vnet_name}-bastion"
+  name                = "${var.prefix}-${var.project_name}-bastion-${var.environment}"
   resource_group_name = var.resource_group_name
   location            = var.location
   sku                 = "Standard"

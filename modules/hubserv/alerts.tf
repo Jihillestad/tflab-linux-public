@@ -330,7 +330,7 @@ resource "azurerm_monitor_diagnostic_setting" "nat_gateway_diagnostics" {
 
 # Action Group for NAT Gateway Alerts
 resource "azurerm_monitor_action_group" "natgw_alerts" {
-  name                = "${var.hub_vnet_name}-natgw-action-group"
+  name                = "${var.prefix}-${var.project_name}-natgw-action-group-${var.environment}"
   resource_group_name = var.resource_group_name
   short_name          = "natgwalert"
 
