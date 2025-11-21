@@ -38,7 +38,7 @@ resource "azurerm_bastion_host" "hub_bastion" {
 # ------------------------------------------------------------------------------
 
 resource "azurerm_public_ip" "nat_gateway_pip" {
-  name                = "${var.hub_vnet_name}-nat-pip"
+  name                = "${var.prefix}-${var.project_name}-natgw-pip-${var.environment}"
   resource_group_name = var.resource_group_name
   location            = var.location
   allocation_method   = "Static"
@@ -48,7 +48,7 @@ resource "azurerm_public_ip" "nat_gateway_pip" {
 }
 
 resource "azurerm_nat_gateway" "nat_gateway" {
-  name                    = "${var.hub_vnet_name}-nat-gtw"
+  name                    = "${var.prefix}-${var.project_name}-natgw-${var.environment}"
   resource_group_name     = var.resource_group_name
   location                = var.location
   sku_name                = "Standard"
@@ -73,7 +73,7 @@ resource "azurerm_subnet_nat_gateway_association" "nat_associations" {
 # ------------------------------------------------------------------------------
 
 resource "azurerm_public_ip" "appgw_pip" {
-  name                = "${var.hub_vnet_name}-appgw-pip"
+  name                = "${var.prefix}-${var.project_name}-appgw-pip-${var.environment}"
   resource_group_name = var.resource_group_name
   location            = var.location
   allocation_method   = "Static"
@@ -83,7 +83,7 @@ resource "azurerm_public_ip" "appgw_pip" {
 }
 
 resource "azurerm_application_gateway" "appgw" {
-  name                = "${var.hub_vnet_name}-appgw"
+  name                = "${var.prefix}-${var.project_name}-appgw-${var.environment}"
   resource_group_name = var.resource_group_name
   location            = var.location
 
