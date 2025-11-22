@@ -8,11 +8,6 @@ variable "location" {
   type        = string
 }
 
-variable "hub_vnet_name" {
-  type        = string
-  description = "Name of the hub VNet (used for resource naming)"
-}
-
 variable "prefix" {
   description = "Prefix for resource names"
   type        = string
