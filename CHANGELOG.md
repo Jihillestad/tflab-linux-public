@@ -1,5 +1,11 @@
 # Change Log
 
+## Version 3.1.4 - Patch release
+
+### Cleanup
+
+- Removed unused var.hub_vnet_name instances as they are no longer needed.
+
 ## Version 3.1.3 - Patch release
 
 ### Features
