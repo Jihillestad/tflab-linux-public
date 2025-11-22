@@ -1,5 +1,13 @@
 # Change Log
 
+## Version 3.1.3 - Patch release
+
+### Features
+
+- Added more Key Vault metric alerts:
+  - KV Latency
+  - KV Failed Requests
+
 ## Version 3.1.2 - Patch release
 
 ### Bug Fixes
