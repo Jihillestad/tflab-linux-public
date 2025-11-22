@@ -76,7 +76,7 @@ resource "azurerm_monitor_metric_alert" "kv_latency" {
     metric_name      = "ServiceApiLatency"
     aggregation      = "Average"
     operator         = "GreaterThan"
-    threshold        = 1000  # 1 second
+    threshold        = 1000 # 1 second
   }
 
   action {
@@ -114,12 +114,3 @@ resource "azurerm_monitor_metric_alert" "kv_failed_requests" {
 
   tags = var.tags
 }
-```
-
----
-
-## 📈 Version Progression Analysis
-```
-v3.0.0 (Major)  → Monitoring refactoring         [A+ 100%]
-v3.1.0 (Minor)  → Added KV, Bastion, NAT monitoring [A  97%]
-v3.1.1 (Patch)  → More alerts + CAF naming       [A+ 99%]
