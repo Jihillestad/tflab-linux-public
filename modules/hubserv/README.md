@@ -47,9 +47,8 @@ module "hub_services" {
 
   resource_group_name = azurerm_resource_group.tflab_linux.name
   location            = azurerm_resource_group.tflab_linux.location
-  hub_vnet_name       = local.hub_vnet.name
   prefix              = var.prefix
-project_name        = var.project_name
+  project_name        = var.project_name
   environment         = var.environment
 
   # Subnet references from hub network module
@@ -134,7 +133,6 @@ module "hub_network" {
 | ------------------- | ------------------------------------------------------------------------------------ | ------------- | -------- | -------- |
 | resource_group_name | (Required) The name of the resource group in which to create the resources.          | `string`      | n/a      | yes      |
 | location            | (Required) The Azure region where resources will be created.                         | `string`      | n/a      | yes      |
-| hub_vnet_name       | (Optional) The name of the Hub Virtual Network.                                      | `string`      | n/a      | yes      |
 | prefix              | (Optional) Prefix for resouce names.                                                 | `string`      | n/a      | no       |
 | project_name        | (Optional) The name of the project.                                                  | `string`      | `"demo"` | no       |
 | environment         | (Optional) Environment name for naming resources.                                    | `string`      | `"dev"`  | no       |

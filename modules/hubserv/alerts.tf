@@ -377,7 +377,6 @@ resource "azurerm_monitor_metric_alert" "natgw_snat_exhaustion" {
 
 # Alert for dropped packets
 resource "azurerm_monitor_metric_alert" "natgw_dropped_packets" {
-  # name                = "${var.hub_vnet_name}-nat-dropped-packets-alert"
   name                = "${var.prefix}-${var.project_name}-natgw-dropped-packets-alert-${var.environment}"
   resource_group_name = var.resource_group_name
   scopes              = [azurerm_nat_gateway.nat_gateway.id]

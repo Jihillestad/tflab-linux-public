@@ -69,7 +69,6 @@ module "hub_services" {
 
   resource_group_name = azurerm_resource_group.tflab_linux.name
   location            = azurerm_resource_group.tflab_linux.location
-  hub_vnet_name       = local.hub_vnet.name
   prefix              = var.prefix
   project_name        = var.project_name
   environment         = var.environment
