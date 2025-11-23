@@ -59,7 +59,7 @@ resource "azurerm_monitor_metric_alert" "appgw_unhealthy_host" {
   resource_group_name = var.resource_group_name
   scopes              = [azurerm_application_gateway.appgw.id]
   description         = "Alert when Application Gateway has unhealthy backend hosts"
-  severity            = 1 # Critical
+  severity            = 1 // Critical
 
   criteria {
     metric_namespace = "Microsoft.Network/applicationGateways"
@@ -74,8 +74,8 @@ resource "azurerm_monitor_metric_alert" "appgw_unhealthy_host" {
   }
 
 
-  frequency   = "PT1M" # Check every 1 minute
-  window_size = "PT5M" # Over 5 minute window
+  frequency   = "PT1M" // Check every 1 minute
+  window_size = "PT5M" // Over 5 minute window
 
   tags = var.tags
 }
@@ -101,8 +101,8 @@ resource "azurerm_monitor_metric_alert" "appgw_failed_requests" {
     action_group_id = azurerm_monitor_action_group.appgw_alerts.id
   }
 
-  frequency   = "PT5M"  # Check every 5 minutes
-  window_size = "PT15M" # Over 15 minute window
+  frequency   = "PT5M"  // Check every 5 minutes
+  window_size = "PT15M" // Over 15 minute window
 
   tags = var.tags
 }
@@ -113,14 +113,14 @@ resource "azurerm_monitor_metric_alert" "appgw_backend_response_time" {
   resource_group_name = var.resource_group_name
   scopes              = [azurerm_application_gateway.appgw.id]
   description         = "Alert when backend response time is too high"
-  severity            = 2 # Warning
+  severity            = 2 // Warning
 
   criteria {
     metric_namespace = "Microsoft.Network/applicationGateways"
     metric_name      = "BackendLastByteResponseTime"
     aggregation      = "Average"
     operator         = "GreaterThan"
-    threshold        = 5000 # 5 seconds
+    threshold        = 5000 // 5 seconds
   }
 
   action {
@@ -139,7 +139,7 @@ resource "azurerm_monitor_metric_alert" "appgw_5xx_errors" {
   resource_group_name = var.resource_group_name
   scopes              = [azurerm_application_gateway.appgw.id]
   description         = "Alert when Application Gateway returns high 5xx errors"
-  severity            = 1 # Critical
+  severity            = 1 // Critical
 
   criteria {
     metric_namespace = "Microsoft.Network/applicationGateways"
@@ -171,7 +171,7 @@ resource "azurerm_monitor_metric_alert" "appgw_4xx_errors" {
   resource_group_name = var.resource_group_name
   scopes              = [azurerm_application_gateway.appgw.id]
   description         = "Alert when Application Gateway returns high 4xx errors"
-  severity            = 2 # Warning
+  severity            = 2 // Warning
 
   criteria {
     metric_namespace = "Microsoft.Network/applicationGateways"
@@ -203,14 +203,14 @@ resource "azurerm_monitor_metric_alert" "appgw_compute_units" {
   resource_group_name = var.resource_group_name
   scopes              = [azurerm_application_gateway.appgw.id]
   description         = "Alert when Application Gateway compute units are high"
-  severity            = 2 # Warning
+  severity            = 2 // Warning
 
   criteria {
     metric_namespace = "Microsoft.Network/applicationGateways"
     metric_name      = "ComputeUnits"
     aggregation      = "Average"
     operator         = "GreaterThan"
-    threshold        = 8 # Out of 10 max for WAF_v2
+    threshold        = 8 // Out of 10 max for WAF_v2
   }
 
   action {
@@ -229,14 +229,14 @@ resource "azurerm_monitor_metric_alert" "appgw_capacity_units" {
   resource_group_name = var.resource_group_name
   scopes              = [azurerm_application_gateway.appgw.id]
   description         = "Alert when Application Gateway capacity units are high (cost)"
-  severity            = 3 # Informational
+  severity            = 3 // Informational
 
   criteria {
     metric_namespace = "Microsoft.Network/applicationGateways"
     metric_name      = "CapacityUnits"
     aggregation      = "Average"
     operator         = "GreaterThan"
-    threshold        = 5 # Alert before autoscaling triggers
+    threshold        = 5 // Alert before autoscaling triggers
   }
 
   action {
@@ -245,6 +245,47 @@ resource "azurerm_monitor_metric_alert" "appgw_capacity_units" {
 
   frequency   = "PT15M"
   window_size = "PT1H"
+
+  tags = var.tags
+}
+
+# Add Application Insights for Application Gateway
+resource "azurerm_application_insights" "appgw_insights" {
+  name                = "${var.prefix}-${var.project_name}-appinsights-${var.environment}"
+  location            = var.location
+  resource_group_name = var.resource_group_name
+  application_type    = "web"
+  workspace_id        = azurerm_log_analytics_workspace.law.id
+
+  tags = var.tags
+}
+
+# Random UID for Workbook naming
+resource "random_uuid" "appgw_workbook_uuid" {}
+
+# Workbook Dashboard for Application Gateway'
+resource "azurerm_application_insights_workbook" "appgw_dashboard" {
+  name                = random_uuid.appgw_workbook_uuid.result
+  resource_group_name = var.resource_group_name
+  location            = var.location
+  display_name        = "Application Gateway Monitoring Dashboard"
+
+  data_json = jsonencode({
+    version = "Notebook/1.0"
+    items = [
+      {
+        type = 3
+        content = {
+          version      = "KqlItem/1.0"
+          query        = "AzureDiagnostics\n| where ResourceType == \"APPLICATIONGATEWAYS\"\n| summarize count() by bin(TimeGenerated, 5m)"
+          size         = 0
+          title        = "Application Gateway Requests"
+          queryType    = 0
+          resourceType = "microsoft.operationalinsights/workspaces"
+        }
+      }
+    ]
+  })
 
   tags = var.tags
 }
@@ -294,14 +335,14 @@ resource "azurerm_monitor_metric_alert" "bastion_high_sessions" {
   resource_group_name = var.resource_group_name
   scopes              = [azurerm_bastion_host.hub_bastion.id]
   description         = "Alert when Bastion has unusually high session count"
-  severity            = 2 # Warning
+  severity            = 2 // Warning
 
   criteria {
     metric_namespace = "Microsoft.Network/bastionHosts"
     metric_name      = "sessions"
     aggregation      = "Average"
     operator         = "GreaterThan"
-    threshold        = 10 # Adjust based on your usage
+    threshold        = 10 // Adjust based on your usage
   }
 
   action {
@@ -355,14 +396,14 @@ resource "azurerm_monitor_metric_alert" "natgw_snat_exhaustion" {
   resource_group_name = var.resource_group_name
   scopes              = [azurerm_nat_gateway.nat_gateway.id]
   description         = "Alert when NAT Gateway is running out of SNAT ports"
-  severity            = 1 # Critical
+  severity            = 1 // Critical
 
   criteria {
     metric_namespace = "Microsoft.Network/natGateways"
     metric_name      = "SNATConnectionCount"
     aggregation      = "Total"
     operator         = "GreaterThan"
-    threshold        = 50000 # 64K max, alert at 50K
+    threshold        = 50000 // 64K max, alert at 50K
   }
 
   action {
@@ -381,7 +422,7 @@ resource "azurerm_monitor_metric_alert" "natgw_dropped_packets" {
   resource_group_name = var.resource_group_name
   scopes              = [azurerm_nat_gateway.nat_gateway.id]
   description         = "Alert when NAT Gateway is dropping packets"
-  severity            = 2 # Warning
+  severity            = 2 // Warning
 
   criteria {
     metric_namespace = "Microsoft.Network/natGateways"

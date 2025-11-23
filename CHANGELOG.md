@@ -1,5 +1,11 @@
 # Change Log
 
+## Version 2.3.1 - Minor release
+
+### Features
+
+- Added Application Insights for better monitoring of Application Gateway.
+
 ## Version 3.1.4 - Patch release
 
 ### Cleanup

@@ -126,6 +126,11 @@ module "hub_network" {
   - NAT Dropped Packets Alert
 - Azure Monitor Log Alerts for Bastion Host
   - Bastion Connection Failures Alert
+- Azure Application Insights
+  - Application Insights instance for Application Gateway monitoring
+- Random UUID for Application Insights Workbook naming
+- Azure Application Insights Workbook
+  - Pre-defined workbook for Application Gateway monitoring
 
 ## Inputs
 
@@ -144,19 +149,21 @@ module "hub_network" {
 
 ## Outputs
 
-| Name                                | Description                                     |
-| ----------------------------------- | ----------------------------------------------- |
-| bastion_host_id                     | The ID of the Azure Bastion Host.               |
-| bastion_host_name                   | The name of the Azure Bastion Host.             |
-| bastion_public_ip                   | The public IP of the Azure Bastion Host.        |
-| nat_gateway_id                      | The ID of the NAT Gateway.                      |
-| nat_gateway_public_ip               | The public IP of the NAT Gateway.               |
-| appgw_id                            | The ID of the Application Gateway.              |
-| appgw_name                          | The name of the Application Gateway.            |
-| appgw_public_ip                     | The public IP of the Application Gateway.       |
-| appgw_backend_pool_id               | The ID of the Application Gateway backend pool. |
-| appgw_subnet_id                     | The ID of the Application Gateway subnet.       |
-| log_analytics_workspace_id          | The workspace ID of the Log Analytics Workspace |
-| log_analytics_workspace_name        | The name of the Log Analytics Workspace         |
-| log_analytics_workspace_resource_id | The resource ID of the Log Analytics Workspace  |
-| log_analytics_workspace_location    | The location of the Log Analytics Workspace     |
+| Name                                     | Description                                     |
+| ---------------------------------------- | ----------------------------------------------- |
+| bastion_host_id                          | The ID of the Azure Bastion Host.               |
+| bastion_host_name                        | The name of the Azure Bastion Host.             |
+| bastion_public_ip                        | The public IP of the Azure Bastion Host.        |
+| nat_gateway_id                           | The ID of the NAT Gateway.                      |
+| nat_gateway_public_ip                    | The public IP of the NAT Gateway.               |
+| appgw_id                                 | The ID of the Application Gateway.              |
+| appgw_name                               | The name of the Application Gateway.            |
+| appgw_public_ip                          | The public IP of the Application Gateway.       |
+| appgw_backend_pool_id                    | The ID of the Application Gateway backend pool. |
+| appgw_subnet_id                          | The ID of the Application Gateway subnet.       |
+| log_analytics_workspace_id               | The workspace ID of the Log Analytics Workspace |
+| log_analytics_workspace_name             | The name of the Log Analytics Workspace         |
+| log_analytics_workspace_resource_id      | The resource ID of the Log Analytics Workspace  |
+| log_analytics_workspace_location         | The location of the Log Analytics Workspace     |
+| application_insights_instrumentation_key | Application Insights Instrumentation Key        |
+| application_insights_id                  | Application Insights ID                         |

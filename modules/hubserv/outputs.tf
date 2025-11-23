@@ -71,3 +71,13 @@ output "log_analytics_workspace_location" {
   value       = azurerm_log_analytics_workspace.law.location
 }
 
+output "application_insights_instrumentation_key" {
+  description = "Application Insights Instrumentation Key"
+  value       = azurerm_application_insights.appgw_insights.instrumentation_key
+  sensitive   = true
+}
+
+output "application_insights_id" {
+  description = "Application Insights ID"
+  value       = azurerm_application_insights.appgw_insights.id
+}
